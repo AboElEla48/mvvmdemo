@@ -73,6 +73,7 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         // create base view model
         if (viewModelFields.size() > 0) {
             baseViewModel = (BaseViewModel) FieldTypeCreator.createFieldObject(viewModelFields.get(0));
+            baseViewModel.initViewModel(baseView);
         }
     }
 

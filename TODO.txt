@@ -4,3 +4,4 @@
 * Associate views in activity and fragment to corresponding values in ViewModel
 * Handle request permissions in base activity
 * Integrate MessageServer
+* Create annotation for singleton

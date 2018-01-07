@@ -18,29 +18,22 @@ import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
 
 public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, ActivityLifeCycle
 {
-    @Override
-    public void onRestart() {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    }
-
-    @Override
-    public boolean onActivityBackPressed() {
-        return false;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-
+    /**
+     * init View Model after creation
+     * @param baseView : the baseView associated with this view model
+     */
+    public void initViewModel(BaseView baseView) {
+        this.baseView = baseView;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return null;
     }
 
     @Override
@@ -64,6 +57,26 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
     }
 
     @Override
+    public void onRestart() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public boolean onActivityBackPressed() {
+        return false;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+    }
+
+    @Override
     public void onDestroy() {
 
     }
@@ -74,12 +87,9 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return null;
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
     }
+
+    private BaseView baseView;
 }

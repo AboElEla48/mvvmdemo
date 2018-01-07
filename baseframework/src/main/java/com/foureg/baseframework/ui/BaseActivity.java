@@ -6,7 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.foureg.baseframework.creators.LifeCycleCreator;
+import com.foureg.baseframework.scanners.ContentViewIDScanner;
 import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by aboelela on 06/01/18.
@@ -18,6 +21,16 @@ public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
     @Override
     public final void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set content view of activity
+        ContentViewIDScanner.extractViewContentID(this, new Consumer<Integer>()
+        {
+            @Override
+            public void accept(Integer resID) throws Exception {
+                setContentView(resID);
+            }
+        });
+
 
         // Init the life cycle creator
         lifeCycleCreator = new LifeCycleCreator(this);
