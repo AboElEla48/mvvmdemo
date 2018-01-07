@@ -36,6 +36,7 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
 
     /**
      * Initialize the host view
+     *
      * @param hostView : the host view of the lifecyclecreator
      */
     public LifeCycleCreator(ViewLifeCycle hostView) {
@@ -46,16 +47,22 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
     public void onCreate(@Nullable Bundle savedInstanceState) {
         // Initialize the view model to receive lifecycle calls
         BaseView baseView = hostViews.get();
-        if(baseView == null) {
+        if (baseView == null) {
             throw new ErrorInitializingFramework("BaseView is null. Can't initializes life cycle creator"); // stop execution
         }
 
         // init view model field
         createFieldAnnotatedAsViewModel(baseView);
+
+        if(baseViewModel != null) {
+            // make lifecycle calls
+            baseViewModel.onCreate(savedInstanceState);
+        }
     }
 
     /**
      * Create field annotated as view model in the base view
+     *
      * @param baseView : the base view (activity or fragment)
      */
     private void createFieldAnnotatedAsViewModel(BaseView baseView) {
@@ -64,68 +71,96 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(baseView, ViewModel.class, viewModelFields);
 
         // create base view model
-        if(viewModelFields.size() > 0) {
+        if (viewModelFields.size() > 0) {
             baseViewModel = (BaseViewModel) FieldTypeCreator.createFieldObject(viewModelFields.get(0));
         }
     }
 
     @Override
     public void onStart() {
-
+        if(baseViewModel != null) {
+            baseViewModel.onStart();
+        }
     }
 
     @Override
     public void onResume() {
-
+        if(baseViewModel != null) {
+            baseViewModel.onResume();
+        }
     }
 
     @Override
     public void onPause() {
-
+        if(baseViewModel != null) {
+            baseViewModel.onPause();
+        }
     }
 
     @Override
     public void onRestart() {
-
+        if(baseViewModel != null) {
+            baseViewModel.onRestart();
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        if(baseViewModel != null) {
+            baseViewModel.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
     public boolean onActivityBackPressed() {
+        if(baseViewModel != null) {
+            return baseViewModel.onActivityBackPressed();
+        }
+
         return false;
     }
 
     @Override
     public void onStop() {
-
+        if(baseViewModel != null) {
+            baseViewModel.onStop();
+        }
     }
 
     @Override
     public void onDestroy() {
-
+        if(baseViewModel != null) {
+            baseViewModel.onDestroy();
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-
+        if(baseViewModel != null) {
+            baseViewModel.onSaveInstanceState(outState);
+        }
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-
+        if(baseViewModel != null) {
+            baseViewModel.onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if(baseViewModel != null) {
+            return baseViewModel.onCreateView(inflater, container, savedInstanceState);
+        }
+
         return null;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
+        if(baseViewModel != null) {
+            baseViewModel.onActivityCreated(savedInstanceState);
+        }
     }
 }

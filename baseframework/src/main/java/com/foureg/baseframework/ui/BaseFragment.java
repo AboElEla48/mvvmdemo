@@ -20,21 +20,21 @@ public class BaseFragment extends Fragment implements FragmentLifeCycle
 {
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public final View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
         return lifeCycleCreator.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public final void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         lifeCycleCreator.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public final void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         lifeCycleCreator = new LifeCycleCreator(this);
@@ -44,38 +44,38 @@ public class BaseFragment extends Fragment implements FragmentLifeCycle
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public final void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         lifeCycleCreator.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void onStart() {
+    public final void onStart() {
         super.onStart();
         lifeCycleCreator.onStart();
     }
 
     @Override
-    public void onResume() {
+    public final void onResume() {
         super.onResume();
         lifeCycleCreator.onResume();
     }
 
     @Override
-    public void onPause() {
+    public final void onPause() {
         super.onPause();
         lifeCycleCreator.onPause();
     }
 
     @Override
-    public void onStop() {
+    public final void onStop() {
         lifeCycleCreator.onStop();
         super.onStop();
     }
 
     @Override
-    public void onDestroy() {
+    public final void onDestroy() {
         lifeCycleCreator.onDestroy();
         super.onDestroy();
     }

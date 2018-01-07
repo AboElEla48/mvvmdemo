@@ -16,7 +16,7 @@ import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
 public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
 {
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public final void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Init the life cycle creator
@@ -25,59 +25,59 @@ public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    public final void onRestoreInstanceState(Bundle savedInstanceState) {
         lifeCycleCreator.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public final void onSaveInstanceState(Bundle outState) {
         lifeCycleCreator.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onStart() {
+    public final void onStart() {
         super.onStart();
         lifeCycleCreator.onStart();
     }
 
     @Override
-    public void onRestart() {
+    public final void onRestart() {
         super.onRestart();
         lifeCycleCreator.onRestart();
     }
 
     @Override
-    public void onPause() {
+    public final void onPause() {
         super.onPause();
         lifeCycleCreator.onPause();
     }
 
     @Override
-    public void onResume() {
+    public final void onResume() {
         super.onResume();
         lifeCycleCreator.onResume();
     }
 
     @Override
-    public void onStop() {
+    public final void onStop() {
         lifeCycleCreator.onStop();
         super.onStop();
     }
 
     @Override
-    public void onDestroy() {
+    public final void onDestroy() {
         lifeCycleCreator.onDestroy();
         super.onDestroy();
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public final void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         lifeCycleCreator.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public boolean onActivityBackPressed() {
+    public final boolean onActivityBackPressed() {
         return lifeCycleCreator.onActivityBackPressed();
     }
 
