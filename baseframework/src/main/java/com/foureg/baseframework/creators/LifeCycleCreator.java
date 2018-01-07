@@ -18,7 +18,8 @@ import com.foureg.baseframework.viewmodel.BaseViewModel;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by aboelela on 07/01/18.
@@ -54,7 +55,7 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         // init view model field
         createFieldAnnotatedAsViewModel(baseView);
 
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             // make lifecycle calls
             baseViewModel.onCreate(savedInstanceState);
         }
@@ -65,56 +66,62 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
      *
      * @param baseView : the base view (activity or fragment)
      */
-    private void createFieldAnnotatedAsViewModel(BaseView baseView) {
+    private void createFieldAnnotatedAsViewModel(final BaseView baseView) {
         // Iterated fields on base view search for fields annotated as ViewModel, then create it
-        ArrayList<Field> viewModelFields = new ArrayList<>();
-        FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(baseView, ViewModel.class, viewModelFields);
 
-        // create base view model
-        if (viewModelFields.size() > 0) {
-            baseViewModel = (BaseViewModel) FieldTypeCreator.createFieldObject(viewModelFields.get(0));
-            baseViewModel.initViewModel(baseView);
-        }
+        FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(baseView, ViewModel.class,
+                new Consumer<Field>()
+                {
+                    @Override
+                    public void accept(Field viewModelField) throws Exception {
+                        // create base view model
+                        baseViewModel = (BaseViewModel) FieldTypeCreator.createFieldObject(viewModelField);
+                        baseViewModel.initViewModel(baseView);
+
+                    }
+                });
+
+
     }
 
     @Override
     public void onStart() {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onStart();
         }
     }
 
     @Override
     public void onResume() {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onResume();
         }
     }
 
     @Override
     public void onPause() {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onPause();
         }
     }
 
     @Override
     public void onRestart() {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onRestart();
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     @Override
     public boolean onActivityBackPressed() {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             return baseViewModel.onActivityBackPressed();
         }
 
@@ -123,35 +130,35 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
 
     @Override
     public void onStop() {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onStop();
         }
     }
 
     @Override
     public void onDestroy() {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onDestroy();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onSaveInstanceState(outState);
         }
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onRestoreInstanceState(savedInstanceState);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             return baseViewModel.onCreateView(inflater, container, savedInstanceState);
         }
 
@@ -160,7 +167,7 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        if(baseViewModel != null) {
+        if (baseViewModel != null) {
             baseViewModel.onActivityCreated(savedInstanceState);
         }
     }

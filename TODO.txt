@@ -1,4 +1,4 @@
-* Pass lifecycle of activity and fragment to view model
+* [Done] Pass lifecycle of activity and fragment to view model
 * Init Activity and fragment with corresponding view ID declared in annotation
 * Scan all fields of activity and fragment to initialize ViewModel fields
 * Associate views in activity and fragment to corresponding values in ViewModel

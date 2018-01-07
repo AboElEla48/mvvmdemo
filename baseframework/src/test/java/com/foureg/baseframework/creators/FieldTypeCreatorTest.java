@@ -7,7 +7,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by aboelela on 07/01/18.
@@ -18,14 +19,21 @@ public class FieldTypeCreatorTest
     @Test
     public void test_createFieldObject() throws Exception {
         TestFieldsHolderDummy fieldsHolderDummy = new TestFieldsHolderDummy();
-        ArrayList<Field> viewModels = new ArrayList<>();
-        FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(fieldsHolderDummy, ViewModel.class, viewModels);
 
-        // create first view model
-        Object o = FieldTypeCreator.createFieldObject(viewModels.get(0));
+        FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(fieldsHolderDummy, ViewModel.class,
+                new Consumer<Field>()
+                {
+                    @Override
+                    public void accept(Field field) throws Exception {
+                        // create first view model
+                        Object o = FieldTypeCreator.createFieldObject(field);
 
-        Assert.assertTrue(o != null);
-        Assert.assertTrue(o.getClass().getName().equals(TestFieldTypeDummy.class.getName()));
+                        Assert.assertTrue(o != null);
+                        Assert.assertTrue(o.getClass().getName().equals(TestFieldTypeDummy.class.getName()));
+                    }
+                });
+
+
     }
 
 }
