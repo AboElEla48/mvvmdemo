@@ -33,6 +33,26 @@ public class ContentViewIDScanner
     }
 
     /**
+     * Extract the resource ID declared over the activity/fragment to set its content with that resource
+     * @param baseView : Activity/Fragment
+     *
+     */
+    public static int extractViewContentID(BaseView baseView) {
+        final TempHolder tempHolder = new TempHolder();
+        Observable.fromIterable(Arrays.asList(baseView.getClass().getDeclaredAnnotations()))
+                .filter(isAnnotationContentViewID())
+                .blockingSubscribe(new Consumer<Annotation>()
+                {
+                    @Override
+                    public void accept(Annotation annotation) throws Exception {
+                        tempHolder.value = ((ContentViewId) annotation).value();
+                    }
+                });
+
+        return tempHolder.value;
+    }
+
+    /**
      * Check if class is annotated with ContentViewId or not
      * @return : Predicate with boolean status
      */
@@ -66,5 +86,9 @@ public class ContentViewIDScanner
                 }).subscribe(resIDConsumer);
             }
         };
+    }
+
+    static class TempHolder {
+        int value;
     }
 }

@@ -18,28 +18,30 @@ import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
 
 public class BaseFragment extends Fragment implements FragmentLifeCycle
 {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        lifeCycleCreator = new LifeCycleCreator(this);
+        lifeCycleCreator.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
-    public final View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public final View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         return lifeCycleCreator.onCreateView(inflater, container, savedInstanceState);
+
     }
 
     @Override
     public final void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         lifeCycleCreator.onSaveInstanceState(outState);
     }
 
     @Override
     public final void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        lifeCycleCreator = new LifeCycleCreator(this);
-        lifeCycleCreator.onCreate(savedInstanceState);
-
         lifeCycleCreator.onActivityCreated(savedInstanceState);
     }
 
@@ -82,4 +84,5 @@ public class BaseFragment extends Fragment implements FragmentLifeCycle
 
     // Object to lifecycle creator
     private LifeCycleCreator lifeCycleCreator;
+    private View fragmentView;
 }

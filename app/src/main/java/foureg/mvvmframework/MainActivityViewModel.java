@@ -2,6 +2,7 @@ package foureg.mvvmframework;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.foureg.baseframework.viewmodel.BaseViewModel;
@@ -19,5 +20,9 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
         Log.w(Constants.LOG_TAG, "MainActivityViewModel::onCreate");
 
         getView().helloTextView.setText("Text From View Model");
+
+        FragmentTransaction transaction = getView().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.activity_fragment_placeholder, new MainFragment());
+        transaction.commit();
     }
 }
