@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
 {
     // Hold object of baseViewModel to pass all calls of lifecycle to it
-    BaseViewModel baseViewModel;
+    private BaseViewModel baseViewModel;
 
     // Hold object of the hosted view (Activity/fragment)
     private WeakReference<ViewLifeCycle> hostViews;
@@ -62,6 +62,11 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         // Iterated fields on base view search for fields annotated as ViewModel, then create it
         ArrayList<Field> viewModelFields = new ArrayList<>();
         FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(baseView, ViewModel.class, viewModelFields);
+
+        // create base view model
+        if(viewModelFields.size() > 0) {
+            baseViewModel = (BaseViewModel) FieldTypeCreator.createFieldObject(viewModelFields.get(0));
+        }
     }
 
     @Override
