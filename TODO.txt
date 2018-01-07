@@ -1,0 +1,11 @@
+* [Done] Pass lifecycle of activity to view model
+* [Done] Init Activity with corresponding view ID declared in annotation
+* [Done] Scan all fields of activity to initialize ViewModel fields
+* Bind views declared in activity
+* Init fragment with corresponding view ID declared in annotation
+* Scan all fields of and fragment to initialize ViewModel fields
+* Pass lifecycle of fragment to view model
+* Associate views in activity and fragment to corresponding values in ViewModel
+* Handle request permissions in base activity
+* Integrate MessageServer
+* Create annotation for singleton

@@ -6,7 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by aboelela on 07/01/18.
@@ -16,15 +17,18 @@ public class FieldAnnotationTypeScannerTest
 {
     @Test
     public void test_extractFieldsAnnotatedBy() throws Exception {
-        ArrayList<Field> resultFields = new ArrayList<>();
-        TestDummyClass testDummyClass = new TestDummyClass();
+
+        final TestDummyClass testDummyClass = new TestDummyClass();
         FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(testDummyClass,
                 ViewModel.class,
-                resultFields);
-
-        Assert.assertTrue(resultFields.size() == 2);
-        Assert.assertTrue(resultFields.get(0).getName().equals(testDummyClass.viewModel1Str));
-        Assert.assertTrue(resultFields.get(1).getName().equals(testDummyClass.viewModel2Str));
+                new Consumer<Field>()
+                {
+                    @Override
+                    public void accept(Field field) throws Exception {
+                        Assert.assertTrue(field.getName().equals(testDummyClass.viewModel1Str)
+                         || field.getName().equals(testDummyClass.viewModel2Str));
+                    }
+                });
     }
 
 }
