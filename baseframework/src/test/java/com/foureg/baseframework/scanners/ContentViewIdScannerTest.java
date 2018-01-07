@@ -7,9 +7,9 @@ import io.reactivex.functions.Consumer;
 
 /**
  * Created by aboelela on 07/01/18.
- * Test code for ContentViewID annotation scanner
+ * Test code for ContentViewId annotation scanner
  */
-public class ContentViewIDScannerTest
+public class ContentViewIdScannerTest
 {
     @Test
     public void test_extractViewContentID() throws Exception {

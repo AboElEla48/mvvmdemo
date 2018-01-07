@@ -17,5 +17,7 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.w(Constants.LOG_TAG, "MainActivityViewModel::onCreate");
+
+//        getView().helloTextView.setText("Text From View Model");
     }
 }

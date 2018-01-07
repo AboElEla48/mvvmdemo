@@ -19,7 +19,7 @@ import io.reactivex.functions.Consumer;
 public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
 {
     @Override
-    public final void onCreate(@Nullable Bundle savedInstanceState) {
+    public final void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // set content view of activity
@@ -28,10 +28,15 @@ public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
             @Override
             public void accept(Integer resID) throws Exception {
                 setContentView(resID);
+                initActivity(savedInstanceState);
+
             }
         });
 
 
+    }
+
+    private void initActivity(Bundle savedInstanceState) {
         // Init the life cycle creator
         lifeCycleCreator = new LifeCycleCreator(this);
         lifeCycleCreator.onCreate(savedInstanceState);
