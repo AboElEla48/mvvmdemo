@@ -135,11 +135,7 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
 
     @Override
     public boolean onActivityBackPressed() {
-        if (baseViewModel != null) {
-            return baseViewModel.onActivityBackPressed();
-        }
-
-        return false;
+        return baseViewModel != null && baseViewModel.onActivityBackPressed();
     }
 
     @Override
@@ -173,7 +169,7 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (baseViewModel != null) {
-            return baseViewModel.onCreateView(inflater, container, savedInstanceState);
+            baseViewModel.onCreateView(inflater, container, savedInstanceState);
         }
 
         return null;

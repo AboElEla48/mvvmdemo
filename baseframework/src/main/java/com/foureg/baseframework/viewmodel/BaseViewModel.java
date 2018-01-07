@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.foureg.baseframework.scanners.ContentViewIDScanner;
 import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
 import com.foureg.baseframework.ui.interfaces.BaseView;
 import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
@@ -48,8 +47,7 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        int resId = ContentViewIDScanner.extractViewContentID(baseView);
-        return inflater.inflate(resId, container, false);
+        return null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.foureg.baseframework.creators.LifeCycleCreator;
+import com.foureg.baseframework.scanners.ContentViewIDScanner;
 import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
 
 /**
@@ -29,8 +30,13 @@ public class BaseFragment extends Fragment implements FragmentLifeCycle
     @Override
     public final View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return lifeCycleCreator.onCreateView(inflater, container, savedInstanceState);
 
+        int resId = ContentViewIDScanner.extractViewContentID(this);
+        View view = inflater.inflate(resId, container, false);
+
+        lifeCycleCreator.onCreateView(inflater, container, savedInstanceState);
+
+        return view;
     }
 
     @Override
