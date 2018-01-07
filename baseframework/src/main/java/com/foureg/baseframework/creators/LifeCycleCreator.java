@@ -1,5 +1,6 @@
 package com.foureg.baseframework.creators;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.foureg.baseframework.annotations.ViewId;
 import com.foureg.baseframework.annotations.ViewModel;
 import com.foureg.baseframework.exceptions.ErrorInitializingFramework;
 import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
@@ -71,14 +71,8 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
      * @param baseView : the base view contains the views fields
      */
     private void createFieldsAnnotatedAsViewId(BaseView baseView) {
-        FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(baseView, ViewId.class,
-                new Consumer<Field>()
-                {
-                    @Override
-                    public void accept(Field viewField) throws Exception {
-                        // TODO: bind view by findViewById
-                    }
-                });
+        // search for fields annotated by viewId and init it with its resource from XML
+        ViewFieldsInitializer.initViewsFields(baseView);
     }
 
     /**
@@ -190,5 +184,10 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         if (baseViewModel != null) {
             baseViewModel.onActivityCreated(savedInstanceState);
         }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return null;
     }
 }

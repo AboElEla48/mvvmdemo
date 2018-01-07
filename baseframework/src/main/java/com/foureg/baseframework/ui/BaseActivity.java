@@ -1,5 +1,6 @@
 package com.foureg.baseframework.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -97,6 +98,11 @@ public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
     @Override
     public final boolean onActivityBackPressed() {
         return lifeCycleCreator.onActivityBackPressed();
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
     }
 
     // Object to lifecycle creator

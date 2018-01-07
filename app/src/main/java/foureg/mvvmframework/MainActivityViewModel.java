@@ -18,6 +18,6 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
         super.onCreate(savedInstanceState);
         Log.w(Constants.LOG_TAG, "MainActivityViewModel::onCreate");
 
-//        getView().helloTextView.setText("Text From View Model");
+        getView().helloTextView.setText("Text From View Model");
     }
 }
