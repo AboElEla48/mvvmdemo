@@ -22,8 +22,16 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
      * init View Model after creation
      * @param baseView : the baseView associated with this view model
      */
-    public void initViewModel(BaseView baseView) {
+    public void initViewModel(V baseView) {
         this.baseView = baseView;
+    }
+
+    /**
+     * Get the baseView for further usage
+     * @return The base view associated with this view model
+     */
+    public V getView() {
+        return baseView;
     }
 
     @Override
@@ -91,5 +99,5 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
 
     }
 
-    private BaseView baseView;
+    private V baseView;
 }
