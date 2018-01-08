@@ -1,6 +1,6 @@
 package com.foureg.baseframework.scanners;
 
-import android.app.Activity;
+import android.view.View;
 
 import com.foureg.baseframework.annotations.ContentViewId;
 import com.foureg.baseframework.annotations.ViewModel;
@@ -26,7 +26,7 @@ class TestDummyClass implements BaseView
     String dummyAnnotation = "dummyAnnotation";
 
     @Override
-    public Activity getActivity() {
+    public View findViewById(int resId) {
         return null;
     }
 }

@@ -1,6 +1,5 @@
 package com.foureg.baseframework.creators;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import com.foureg.baseframework.annotations.ViewModel;
 import com.foureg.baseframework.exceptions.ErrorInitializingFramework;
 import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
+import com.foureg.baseframework.ui.BaseActivity;
 import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
 import com.foureg.baseframework.ui.interfaces.BaseView;
 import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
@@ -53,8 +53,11 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
             throw new ErrorInitializingFramework("BaseView is null. Can't initializes life cycle creator"); // stop execution
         }
 
-        // init fields in base view (Associate vars with its views from xml)
-        createFieldsAnnotatedAsViewId(baseView);
+        if(baseView instanceof BaseActivity) {
+            // init fields in base view (Associate vars with its views from xml)
+            // At this step the activity is initialized with its XML but fragment not initialized yet
+            createFieldsAnnotatedAsViewId(baseView);
+        }
 
         // init view model field
         createFieldAnnotatedAsViewModel(baseView);
@@ -166,8 +169,17 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         }
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        BaseView baseView = hostViews.get();
+        if(baseView != null) {
+            // init fields in base view (Associate vars with its views from xml)
+            createFieldsAnnotatedAsViewId(baseView);
+        }
+
         if (baseViewModel != null) {
             baseViewModel.onCreateView(inflater, container, savedInstanceState);
         }
@@ -183,7 +195,7 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
     }
 
     @Override
-    public Activity getActivity() {
+    public View findViewById(int resId) {
         return null;
     }
 }

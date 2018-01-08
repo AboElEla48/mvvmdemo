@@ -1,6 +1,6 @@
 package com.foureg.baseframework.ui.interfaces;
 
-import android.app.Activity;
+import android.view.View;
 
 /**
  * Created by AboelelaA on 6/6/2017.
@@ -9,5 +9,5 @@ import android.app.Activity;
  */
 public interface BaseView
 {
-    Activity getActivity();
+    View findViewById(int resId);
 }

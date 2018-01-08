@@ -1,6 +1,5 @@
 package com.foureg.baseframework.viewmodel;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,8 +35,8 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
     }
 
     @Override
-    public Activity getActivity() {
-        return null;
+    public View findViewById(int resId) {
+        return baseView.findViewById(resId);
     }
 
     @Override

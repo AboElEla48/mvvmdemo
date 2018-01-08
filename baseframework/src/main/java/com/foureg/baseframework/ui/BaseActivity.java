@@ -1,10 +1,10 @@
 package com.foureg.baseframework.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.foureg.baseframework.creators.LifeCycleCreator;
 import com.foureg.baseframework.scanners.ContentViewIDScanner;
@@ -101,8 +101,8 @@ public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
     }
 
     @Override
-    public Activity getActivity() {
-        return this;
+    public View findViewById(int id) {
+        return super.findViewById(id);
     }
 
     // Object to lifecycle creator

@@ -32,11 +32,11 @@ public class BaseFragment extends Fragment implements FragmentLifeCycle
         super.onCreateView(inflater, container, savedInstanceState);
 
         int resId = ContentViewIDScanner.extractViewContentID(this);
-        View view = inflater.inflate(resId, container, false);
+        fragmentView = inflater.inflate(resId, container, false);
 
         lifeCycleCreator.onCreateView(inflater, container, savedInstanceState);
 
-        return view;
+        return fragmentView;
     }
 
     @Override
@@ -86,6 +86,11 @@ public class BaseFragment extends Fragment implements FragmentLifeCycle
     public final void onDestroy() {
         lifeCycleCreator.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public View findViewById(int resId) {
+        return fragmentView.findViewById(resId);
     }
 
     // Object to lifecycle creator

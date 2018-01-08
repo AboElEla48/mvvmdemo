@@ -17,13 +17,13 @@ import io.reactivex.functions.Predicate;
  * views from XML
  */
 
-public class ViewFieldsInitializer
+class ViewFieldsInitializer
 {
     /**
      * Init fields annotated as ViewId with its View from XML
      * @param baseView : the host view
      */
-    public static void initViewsFields(final BaseView baseView) {
+    static void initViewsFields(final BaseView baseView) {
         Field[] fields = baseView.getClass().getDeclaredFields();
 
         // Loop fields in given object
@@ -78,7 +78,7 @@ public class ViewFieldsInitializer
             boolean isFieldAccessible = field.isAccessible();
             field.setAccessible(true);
             int resId = ((ViewId) annotation).value();
-            field.set(baseView, baseView.getActivity().findViewById(resId));
+            field.set(baseView, baseView.findViewById(resId));
             field.setAccessible(isFieldAccessible);
         }
         catch (IllegalAccessException ex) {

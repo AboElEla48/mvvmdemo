@@ -1,6 +1,5 @@
 package com.foureg.baseframework.creators;
 
-import android.app.Activity;
 import android.view.View;
 
 import com.foureg.baseframework.annotations.ViewId;
@@ -21,7 +20,7 @@ class TestFieldsHolderDummy implements BaseView
     View fieldVal;
 
     @Override
-    public Activity getActivity() {
-        return new Activity();
+    public View findViewById(int resId) {
+        return null;
     }
 }
