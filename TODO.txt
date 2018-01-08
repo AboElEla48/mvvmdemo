@@ -10,3 +10,4 @@
 * Handle request permissions in base activity
 * Integrate MessageServer
 * Create annotation for singleton
+
