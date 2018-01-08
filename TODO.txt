@@ -6,6 +6,7 @@
 * [Done] Pass lifecycle of fragment to view model
 * [Done] Scan all fields of fragment to initialize ViewModel fields
 * Associate views in activity and fragment to corresponding values in ViewModel
+* Set Arguments to fragments
 * Handle request permissions in base activity
 * Integrate MessageServer
 * Create annotation for singleton
