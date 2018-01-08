@@ -1,6 +1,6 @@
 package com.foureg.baseframework.scanners;
 
-import com.foureg.baseframework.annotations.ContentViewID;
+import com.foureg.baseframework.annotations.ContentViewId;
 import com.foureg.baseframework.ui.interfaces.BaseView;
 
 import java.lang.annotation.Annotation;
@@ -33,7 +33,27 @@ public class ContentViewIDScanner
     }
 
     /**
-     * Check if class is annotated with ContentViewID or not
+     * Extract the resource ID declared over the activity/fragment to set its content with that resource
+     * @param baseView : Activity/Fragment
+     *
+     */
+    public static int extractViewContentID(BaseView baseView) {
+        final TempHolder tempHolder = new TempHolder();
+        Observable.fromIterable(Arrays.asList(baseView.getClass().getDeclaredAnnotations()))
+                .filter(isAnnotationContentViewID())
+                .blockingSubscribe(new Consumer<Annotation>()
+                {
+                    @Override
+                    public void accept(Annotation annotation) throws Exception {
+                        tempHolder.value = ((ContentViewId) annotation).value();
+                    }
+                });
+
+        return tempHolder.value;
+    }
+
+    /**
+     * Check if class is annotated with ContentViewId or not
      * @return : Predicate with boolean status
      */
     private static Predicate<Annotation> isAnnotationContentViewID() {
@@ -41,7 +61,7 @@ public class ContentViewIDScanner
         {
             @Override
             public boolean test(Annotation annotation) throws Exception {
-                return annotation.annotationType().getName().equals(ContentViewID.class.getName());
+                return annotation.annotationType().getName().equals(ContentViewId.class.getName());
             }
         };
     }
@@ -56,7 +76,7 @@ public class ContentViewIDScanner
         {
             @Override
             public void accept(Annotation annotation) throws Exception {
-                final int resourceId = ((ContentViewID) annotation).value();
+                final int resourceId = ((ContentViewId) annotation).value();
                 Observable.create(new ObservableOnSubscribe<Integer>()
                 {
                     @Override
@@ -66,5 +86,9 @@ public class ContentViewIDScanner
                 }).subscribe(resIDConsumer);
             }
         };
+    }
+
+    static class TempHolder {
+        int value;
     }
 }

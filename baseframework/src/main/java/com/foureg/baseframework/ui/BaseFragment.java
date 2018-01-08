@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.foureg.baseframework.creators.LifeCycleCreator;
+import com.foureg.baseframework.scanners.ContentViewIDScanner;
 import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
 
 /**
@@ -18,28 +19,35 @@ import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
 
 public class BaseFragment extends Fragment implements FragmentLifeCycle
 {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        lifeCycleCreator = new LifeCycleCreator(this);
+        lifeCycleCreator.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
-    public final View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public final View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        return lifeCycleCreator.onCreateView(inflater, container, savedInstanceState);
+        int resId = ContentViewIDScanner.extractViewContentID(this);
+        fragmentView = inflater.inflate(resId, container, false);
+
+        lifeCycleCreator.onCreateView(inflater, container, savedInstanceState);
+
+        return fragmentView;
     }
 
     @Override
     public final void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         lifeCycleCreator.onSaveInstanceState(outState);
     }
 
     @Override
     public final void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        lifeCycleCreator = new LifeCycleCreator(this);
-        lifeCycleCreator.onCreate(savedInstanceState);
-
         lifeCycleCreator.onActivityCreated(savedInstanceState);
     }
 
@@ -80,6 +88,12 @@ public class BaseFragment extends Fragment implements FragmentLifeCycle
         super.onDestroy();
     }
 
+    @Override
+    public View findViewById(int resId) {
+        return fragmentView.findViewById(resId);
+    }
+
     // Object to lifecycle creator
     private LifeCycleCreator lifeCycleCreator;
+    private View fragmentView;
 }

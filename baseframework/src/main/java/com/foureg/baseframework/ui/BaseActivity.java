@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.foureg.baseframework.creators.LifeCycleCreator;
 import com.foureg.baseframework.scanners.ContentViewIDScanner;
@@ -19,7 +20,7 @@ import io.reactivex.functions.Consumer;
 public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
 {
     @Override
-    public final void onCreate(@Nullable Bundle savedInstanceState) {
+    public final void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // set content view of activity
@@ -28,10 +29,15 @@ public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
             @Override
             public void accept(Integer resID) throws Exception {
                 setContentView(resID);
+                initActivity(savedInstanceState);
+
             }
         });
 
 
+    }
+
+    private void initActivity(Bundle savedInstanceState) {
         // Init the life cycle creator
         lifeCycleCreator = new LifeCycleCreator(this);
         lifeCycleCreator.onCreate(savedInstanceState);
@@ -92,6 +98,11 @@ public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
     @Override
     public final boolean onActivityBackPressed() {
         return lifeCycleCreator.onActivityBackPressed();
+    }
+
+    @Override
+    public View findViewById(int id) {
+        return super.findViewById(id);
     }
 
     // Object to lifecycle creator

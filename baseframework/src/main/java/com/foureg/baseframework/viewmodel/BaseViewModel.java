@@ -35,6 +35,11 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
     }
 
     @Override
+    public View findViewById(int resId) {
+        return baseView.findViewById(resId);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
     }
