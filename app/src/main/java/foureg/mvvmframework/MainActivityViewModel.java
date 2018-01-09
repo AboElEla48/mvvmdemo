@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextViewTextColorField;
 import com.foureg.baseframework.viewmodel.BaseViewModel;
 import com.jakewharton.rxbinding2.view.RxView;
 
@@ -43,4 +44,8 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
 
     @ViewModelTextField(R.id.activity_text_view)
     private String activityTextViewTextVal;
+
+    @ViewModelTextViewTextColorField(R.id.activity_text_view)
+    private int activityTextViewTextColorVal;
+
 }
