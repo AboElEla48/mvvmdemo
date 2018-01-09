@@ -1,12 +1,7 @@
 package com.foureg.baseframework.viewmodel;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,9 +15,7 @@ import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextViewTex
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelViewVisibilityField;
 import com.foureg.baseframework.exceptions.ErrorInitializingFramework;
 import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
-import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
 import com.foureg.baseframework.ui.interfaces.BaseView;
-import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -39,7 +32,7 @@ import io.reactivex.subjects.PublishSubject;
  * This should be the base view model of all view models
  */
 
-public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, ActivityLifeCycle
+public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, ActivityLifeCycle*/
 {
     /**
      * init View Model after creation
@@ -459,84 +452,6 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
         };
     }
 
-    /**
-     * Get the baseView for further usage
-     *
-     * @return The base view associated with this view model
-     */
-    public V getView() {
-        return baseView;
-    }
-
-    @Override
-    public View findViewById(int resId) {
-        return baseView.findViewById(resId);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return null;
-    }
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onResume() {
-
-    }
-
-    @Override
-    public void onPause() {
-
-    }
-
-    @Override
-    public void onStop() {
-
-    }
-
-    @Override
-    public void onRestart() {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    }
-
-    @Override
-    public boolean onActivityBackPressed() {
-        return false;
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    public void onDestroy() {
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
-    }
 
     private V baseView;
 

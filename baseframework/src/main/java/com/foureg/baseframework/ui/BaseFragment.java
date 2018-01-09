@@ -11,14 +11,24 @@ import android.view.ViewGroup;
 import com.foureg.baseframework.creators.LifeCycleCreator;
 import com.foureg.baseframework.scanners.ContentViewIDScanner;
 import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
+import com.foureg.baseframework.viewmodel.BaseViewModel;
 
 /**
  * Created by aboelela on 06/01/18.
  * This should be the base class for all fragments
  */
 
-public class BaseFragment extends Fragment implements FragmentLifeCycle
+public class BaseFragment<VM extends BaseViewModel> extends Fragment implements FragmentLifeCycle
 {
+    /**
+     * get the view model associated with view
+     *
+     * @return : the view model associated with view
+     */
+    public VM getViewModel() {
+        return (VM)lifeCycleCreator.getViewModel();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
