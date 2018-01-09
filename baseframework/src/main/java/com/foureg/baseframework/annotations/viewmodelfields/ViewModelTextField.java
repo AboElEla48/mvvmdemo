@@ -19,4 +19,5 @@ import java.lang.annotation.Target;
 public @interface ViewModelTextField
 {
     int value();
+    String fieldName();
 }

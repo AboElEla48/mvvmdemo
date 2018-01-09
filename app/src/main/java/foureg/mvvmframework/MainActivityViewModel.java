@@ -42,10 +42,12 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
                 });
     }
 
-    @ViewModelTextField(R.id.activity_text_view)
+    @ViewModelTextField(value = R.id.activity_text_view, fieldName = "activityTextViewTextVal")
     private String activityTextViewTextVal;
 
-    @ViewModelTextViewTextColorField(R.id.activity_text_view)
+    @ViewModelTextViewTextColorField(value = R.id.activity_text_view, fieldName = "activityTextViewTextColorVal")
     private int activityTextViewTextColorVal;
+
+
 
 }

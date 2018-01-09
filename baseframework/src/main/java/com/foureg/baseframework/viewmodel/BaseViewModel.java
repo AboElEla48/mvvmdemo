@@ -1,12 +1,15 @@
 package com.foureg.baseframework.viewmodel;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelCheckBoxField;
@@ -46,7 +49,12 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
     public void initViewModel(V baseView) {
         this.baseView = baseView;
 
+        initViewModelFieldsAnnotatedAsCheckBoxField();
         initViewModelFieldsAnnotatedAsTextViewField();
+        initViewModelFieldsAnnotatedAsTextViewTextColorField();
+        initViewModelFieldsAnnotatedAsHintEditTextField();
+        initViewModelFieldsAnnotatedAsImageViewField();
+        initViewModelFieldsAnnotatedAsViewVisibilityField();
     }
 
     /**
@@ -85,14 +93,21 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
         } else if (annotationType.getName().equals(ViewModelCheckBoxField.class.getName())) {
             return consumeCheckBoxAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelHintEditTextField.class.getName())) {
-
+            return consumeEditTextHintAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelImageViewField.class.getName())) {
-
+            return consumeImageViewAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelViewVisibilityField.class.getName())) {
-
+            return consumeViewVisibilityAnnotation(field);
         }
 
         throw new ErrorInitializingFramework("Annotation in View Model not found!");
+    }
+
+    /**
+     * scan fields annotated as CheckBox fields to associate it with CheckBox
+     */
+    private void initViewModelFieldsAnnotatedAsCheckBoxField() {
+        processFieldOfAnnotation(ViewModelCheckBoxField.class);
     }
 
     /**
@@ -126,7 +141,7 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
     /**
      * scan fields annotated as Visibility fields to associate it with visibility value
      */
-    private void initViewModelFieldsAnnotatedAsViewVisbilityField() {
+    private void initViewModelFieldsAnnotatedAsViewVisibilityField() {
         processFieldOfAnnotation(ViewModelViewVisibilityField.class);
     }
 
@@ -142,12 +157,12 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
             @Override
             public void accept(Annotation annotation) throws Exception {
                 int resId = ((ViewModelTextField) annotation).value();
+                String fieldName = ((ViewModelTextField) annotation).fieldName();
 
-                PublishSubject fieldPublishSubject = createTextViewPublishSubject(field.getName(),
-                        resId);
+                PublishSubject fieldPublishSubject = createTextViewPublishSubject(resId);
 
                 // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(field.getName(), fieldPublishSubject);
+                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
 
             }
         };
@@ -165,13 +180,13 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
             @Override
             public void accept(Annotation annotation) throws Exception {
                 int resId = ((ViewModelTextViewTextColorField) annotation).value();
+                String fieldName = ((ViewModelTextViewTextColorField) annotation).fieldName();
 
                 PublishSubject fieldPublishSubject = createTextViewTextColorPublishSubject(
-                        field.getName(),
                         resId);
 
                 // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(field.getName(), fieldPublishSubject);
+                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
 
             }
         };
@@ -189,13 +204,82 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
             @Override
             public void accept(Annotation annotation) throws Exception {
                 int resId = ((ViewModelCheckBoxField) annotation).value();
+                String fieldName = ((ViewModelCheckBoxField) annotation).fieldName();
 
                 PublishSubject fieldPublishSubject = createCheckBoxPublishSubject(
-                        field.getName(),
                         resId);
 
                 // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(field.getName(), fieldPublishSubject);
+                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
+
+            }
+        };
+    }
+
+    /**
+     * create Edit Text Hint text annotation consumer
+     *
+     * @param field the field of annotation
+     * @return the consumer of annotation
+     */
+    private Consumer<Annotation> consumeEditTextHintAnnotation(final Field field) {
+        return new Consumer<Annotation>()
+        {
+            @Override
+            public void accept(Annotation annotation) throws Exception {
+                int resId = ((ViewModelHintEditTextField) annotation).value();
+                String fieldName = ((ViewModelHintEditTextField) annotation).fieldName();
+
+                PublishSubject fieldPublishSubject = createEditTextHintPublishSubject(resId);
+
+                // Add this view and its corresponding publish subject to actions map
+                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
+
+            }
+        };
+    }
+
+    /**
+     * create Image view annotation consumer
+     *
+     * @param field the field of annotation
+     * @return the consumer of annotation
+     */
+    private Consumer<Annotation> consumeImageViewAnnotation(final Field field) {
+        return new Consumer<Annotation>()
+        {
+            @Override
+            public void accept(Annotation annotation) throws Exception {
+                int resId = ((ViewModelImageViewField) annotation).value();
+                String fieldName = ((ViewModelImageViewField) annotation).fieldName();
+
+                PublishSubject fieldPublishSubject = createImageViewPublishSubject(resId);
+
+                // Add this view and its corresponding publish subject to actions map
+                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
+
+            }
+        };
+    }
+
+    /**
+     * create View visibility annotation consumer
+     *
+     * @param field the field of annotation
+     * @return the consumer of annotation
+     */
+    private Consumer<Annotation> consumeViewVisibilityAnnotation(final Field field) {
+        return new Consumer<Annotation>()
+        {
+            @Override
+            public void accept(Annotation annotation) throws Exception {
+                int resId = ((ViewModelViewVisibilityField) annotation).value();
+                String fieldName = ((ViewModelViewVisibilityField) annotation).fieldName();
+
+                PublishSubject fieldPublishSubject = createViewVisibilityPublishSubject(resId);
+
+                // Add this view and its corresponding publish subject to actions map
+                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
 
             }
         };
@@ -206,7 +290,7 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<String> createTextViewPublishSubject(String fieldName, final int resId) {
+    private PublishSubject<String> createTextViewPublishSubject(final int resId) {
         PublishSubject<String> fieldPublishSubject = PublishSubject.create();
 
         fieldPublishSubject.subscribe(new Consumer<String>()
@@ -227,8 +311,7 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<Integer> createTextViewTextColorPublishSubject(String fieldName,
-                                                                          final int resId) {
+    private PublishSubject<Integer> createTextViewTextColorPublishSubject(final int resId) {
         PublishSubject<Integer> fieldPublishSubject = PublishSubject.create();
 
         fieldPublishSubject.subscribe(new Consumer<Integer>()
@@ -249,8 +332,7 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<Boolean> createCheckBoxPublishSubject(String fieldName,
-                                                                 final int resId) {
+    private PublishSubject<Boolean> createCheckBoxPublishSubject(final int resId) {
         PublishSubject<Boolean> fieldPublishSubject = PublishSubject.create();
 
         fieldPublishSubject.subscribe(new Consumer<Boolean>()
@@ -259,6 +341,69 @@ public class BaseViewModel<V extends BaseView> implements FragmentLifeCycle, Act
             public void accept(Boolean checkVal) throws Exception {
                 CheckBox checkBox = (CheckBox) baseView.findViewById(resId);
                 checkBox.setChecked(checkVal);
+            }
+        });
+
+        return fieldPublishSubject;
+
+    }
+
+    /**
+     * Associate the editText hint annotation with the actual action to set hint value to edit text
+     *
+     * @param resId the view resource Id
+     */
+    private PublishSubject<String> createEditTextHintPublishSubject(final int resId) {
+        PublishSubject<String> fieldPublishSubject = PublishSubject.create();
+
+        fieldPublishSubject.subscribe(new Consumer<String>()
+        {
+            @Override
+            public void accept(String hintText) throws Exception {
+                EditText editText = (EditText) baseView.findViewById(resId);
+                editText.setText(hintText);
+            }
+        });
+
+        return fieldPublishSubject;
+
+    }
+
+    /**
+     * Associate the view visibility annotation with the actual action to set visbility
+     *
+     * @param resId the view resource Id
+     */
+    private PublishSubject<Integer> createViewVisibilityPublishSubject(final int resId) {
+        PublishSubject<Integer> fieldPublishSubject = PublishSubject.create();
+
+        fieldPublishSubject.subscribe(new Consumer<Integer>()
+        {
+            @Override
+            public void accept(Integer visibility) throws Exception {
+                View view = baseView.findViewById(resId);
+                view.setVisibility(visibility);
+            }
+        });
+
+        return fieldPublishSubject;
+
+    }
+
+    /**
+     * Associate the view image annotation
+     *
+     * @param resId the view resource Id
+     */
+    private PublishSubject<Bitmap> createImageViewPublishSubject(final int resId) {
+        PublishSubject<Bitmap> fieldPublishSubject = PublishSubject.create();
+
+        fieldPublishSubject.subscribe(new Consumer<Bitmap>()
+        {
+            @Override
+            public void accept(Bitmap bitmap) throws Exception {
+                ImageView imageView = (ImageView) baseView.findViewById(resId);
+                imageView.setImageBitmap(bitmap);
             }
         });
 
