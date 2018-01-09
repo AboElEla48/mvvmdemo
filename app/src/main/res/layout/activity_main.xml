@@ -14,6 +14,14 @@
         android:text="Hello World!"
         android:layout_centerInParent="true"/>
 
+    <Button
+        android:id="@+id/activity_change_text_value_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/activity_text_view"
+        android:layout_centerHorizontal="true"
+        android:text="Change Text value"/>
+
     <FrameLayout
         android:id="@+id/activity_fragment_placeholder"
         android:layout_width="match_parent"

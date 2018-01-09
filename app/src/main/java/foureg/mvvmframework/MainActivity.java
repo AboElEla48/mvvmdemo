@@ -1,5 +1,6 @@
 package foureg.mvvmframework;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.foureg.baseframework.annotations.ContentViewId;
@@ -15,4 +16,7 @@ public class MainActivity extends BaseActivity
 
     @ViewId(R.id.activity_text_view)
     TextView helloTextView;
+
+    @ViewId(R.id.activity_change_text_value_btn)
+    Button changeTextBtn;
 }
