@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.View;
 
 import com.foureg.baseframework.ui.BaseViewPresenter;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -39,6 +40,18 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
                                 "Text from View Model after click");
                         Log.w(Constants.LOG_TAG, "activityTextViewTextVal = "
                                 + getView().getViewModel().getActivityTextViewTextVal());
+                    }
+                });
+
+        RxView.clicks(getView().hideViewBtn)
+                .subscribe(new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        getView().getViewModel().setValue("visibilityViewVal", View.GONE);
+
+                        Log.w(Constants.LOG_TAG, "visibilityViewVal = "
+                                + getView().getViewModel().getVisibilityViewVal());
                     }
                 });
     }
