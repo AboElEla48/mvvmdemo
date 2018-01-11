@@ -1,6 +1,8 @@
 package com.foureg.baseframework.viewmodel;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -18,6 +20,8 @@ import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
 import com.foureg.baseframework.types.Property;
 import com.foureg.baseframework.ui.interfaces.BaseView;
 
+import org.w3c.dom.Text;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -31,7 +35,7 @@ import io.reactivex.functions.Predicate;
  * This should be the base view model of all view models
  */
 
-public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, ActivityLifeCycle*/
+public class BaseViewModel<V extends BaseView>
 {
     /**
      * init View Model after creation
@@ -150,12 +154,17 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelTextField) annotation).value();
                 String fieldName = ((ViewModelTextField) annotation).fieldName();
 
+                // get the associated view
                 TextView view = (TextView) baseView.findViewById(resId);
 
+                // init view model field with value in the view
+                Property<String> viewModelProperty = ((Property<String>) field.get(BaseViewModel.this));
+                viewModelProperty.set(view.getText().toString());
+
+                // associate property with view
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<String>) field.get(BaseViewModel.this)).asObservable(
-                        consumeTextViewAction(view));
+                viewModelProperty.asObservable(consumeTextViewAction(view));
                 field.setAccessible(isAccessible);
             }
         };
@@ -174,12 +183,17 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelTextViewTextColorField) annotation).value();
                 String fieldName = ((ViewModelTextViewTextColorField) annotation).fieldName();
 
+                // get the associated view
                 TextView view = (TextView) baseView.findViewById(resId);
 
+                // init view model field with value in the view
+                Property<Integer> viewModelProperty = ((Property<Integer>) field.get(BaseViewModel.this));
+                viewModelProperty.set(view.getCurrentTextColor());
+
+                // associate property with view
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(
-                        consumeTextViewColorAction(view));
+                viewModelProperty.asObservable(consumeTextViewColorAction(view));
                 field.setAccessible(isAccessible);
 
             }
@@ -199,12 +213,17 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelCheckBoxField) annotation).value();
                 String fieldName = ((ViewModelCheckBoxField) annotation).fieldName();
 
+                // get the associated view
                 CheckBox view = (CheckBox) baseView.findViewById(resId);
 
+                // init view model field with value in the view
+                Property<Boolean> viewModelProperty = ((Property<Boolean>) field.get(BaseViewModel.this));
+                viewModelProperty.set(view.isChecked());
+
+                // associate property with view
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<Boolean>) field.get(BaseViewModel.this)).asObservable(
-                        consumeCheckBoxAction(view));
+                viewModelProperty.asObservable(consumeCheckBoxAction(view));
                 field.setAccessible(isAccessible);
             }
         };
@@ -223,12 +242,17 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelHintEditTextField) annotation).value();
                 String fieldName = ((ViewModelHintEditTextField) annotation).fieldName();
 
+                // get the associated view
                 EditText view = (EditText) baseView.findViewById(resId);
 
+                // init view model field with value in the view
+                Property<String> viewModelProperty = ((Property<String>) field.get(BaseViewModel.this));
+                viewModelProperty.set(view.getHint().toString());
+
+                // associate property with view
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<String>) field.get(BaseViewModel.this)).asObservable(
-                        consumeEditTextHintAction(view));
+                viewModelProperty.asObservable(consumeEditTextHintAction(view));
                 field.setAccessible(isAccessible);
             }
         };
@@ -247,12 +271,17 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelImageViewField) annotation).value();
                 String fieldName = ((ViewModelImageViewField) annotation).fieldName();
 
+                // get the associated view
                 ImageView view = (ImageView) baseView.findViewById(resId);
 
+                // init view model field with value in the view
+                Property<Bitmap> viewModelProperty = ((Property<Bitmap>) field.get(BaseViewModel.this));
+                viewModelProperty.set(((BitmapDrawable) view.getDrawable()).getBitmap());
+
+                // associate property with view
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<Bitmap>) field.get(BaseViewModel.this)).asObservable(
-                        consumeImageViewAction(view));
+                viewModelProperty.asObservable(consumeImageViewAction(view));
                 field.setAccessible(isAccessible);
 
             }
@@ -272,8 +301,10 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelViewVisibilityField) annotation).value();
                 String fieldName = ((ViewModelViewVisibilityField) annotation).fieldName();
 
+                // get the associated view
                 View view = baseView.findViewById(resId);
 
+                // associate property with view
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
                 ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(

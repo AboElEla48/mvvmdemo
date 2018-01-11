@@ -9,15 +9,17 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        android.compileOptions.sourceCompatibility JavaVersion.VERSION_1_8
+        android.compileOptions.targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
