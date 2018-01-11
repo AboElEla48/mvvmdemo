@@ -80,17 +80,17 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     private Consumer<Annotation> getCorrespondingConsumerToAnnotation(Field field,
                                                                       Class<?> annotationType) throws Exception {
         if (annotationType.getName().equals(ViewModelTextField.class.getName())) {
-            return consumeTextViewAnnotation(field);
+            return consumeTextViewAnnotation();
         } else if (annotationType.getName().equals(ViewModelTextViewTextColorField.class.getName())) {
-            return consumeTextViewColorAnnotation(field);
+            return consumeTextViewColorAnnotation();
         } else if (annotationType.getName().equals(ViewModelCheckBoxField.class.getName())) {
-            return consumeCheckBoxAnnotation(field);
+            return consumeCheckBoxAnnotation();
         } else if (annotationType.getName().equals(ViewModelHintEditTextField.class.getName())) {
-            return consumeEditTextHintAnnotation(field);
+            return consumeEditTextHintAnnotation();
         } else if (annotationType.getName().equals(ViewModelImageViewField.class.getName())) {
-            return consumeImageViewAnnotation(field);
+            return consumeImageViewAnnotation();
         } else if (annotationType.getName().equals(ViewModelViewVisibilityField.class.getName())) {
-            return consumeViewVisibilityAnnotation(field);
+            return consumeViewVisibilityAnnotation();
         }
 
         throw new ErrorInitializingFramework("Annotation in View Model not found!");
@@ -141,10 +141,9 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * create Text View annotation consumer
      *
-     * @param field the field of annotation
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeTextViewAnnotation(final Field field) {
+    private Consumer<Annotation> consumeTextViewAnnotation() {
         return new Consumer<Annotation>()
         {
             @Override
@@ -164,10 +163,9 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * create Text View Color annotation consumer
      *
-     * @param field the field of annotation
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeTextViewColorAnnotation(final Field field) {
+    private Consumer<Annotation> consumeTextViewColorAnnotation() {
         return new Consumer<Annotation>()
         {
             @Override
@@ -188,10 +186,9 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * create CheckBox annotation consumer
      *
-     * @param field the field of annotation
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeCheckBoxAnnotation(final Field field) {
+    private Consumer<Annotation> consumeCheckBoxAnnotation() {
         return new Consumer<Annotation>()
         {
             @Override
@@ -212,10 +209,9 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * create Edit Text Hint text annotation consumer
      *
-     * @param field the field of annotation
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeEditTextHintAnnotation(final Field field) {
+    private Consumer<Annotation> consumeEditTextHintAnnotation() {
         return new Consumer<Annotation>()
         {
             @Override
@@ -235,10 +231,9 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * create Image view annotation consumer
      *
-     * @param field the field of annotation
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeImageViewAnnotation(final Field field) {
+    private Consumer<Annotation> consumeImageViewAnnotation() {
         return new Consumer<Annotation>()
         {
             @Override
@@ -258,10 +253,9 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * create View visibility annotation consumer
      *
-     * @param field the field of annotation
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeViewVisibilityAnnotation(final Field field) {
+    private Consumer<Annotation> consumeViewVisibilityAnnotation() {
         return new Consumer<Annotation>()
         {
             @Override
