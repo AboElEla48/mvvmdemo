@@ -150,9 +150,12 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelTextField) annotation).value();
                 String fieldName = ((ViewModelTextField) annotation).fieldName();
 
+                TextView view = (TextView) baseView.findViewById(resId);
+
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<String>) field.get(BaseViewModel.this)).asObservable(consumeTextViewAction(resId));
+                ((Property<String>) field.get(BaseViewModel.this)).asObservable(
+                        consumeTextViewAction(view));
                 field.setAccessible(isAccessible);
             }
         };
@@ -171,9 +174,12 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelTextViewTextColorField) annotation).value();
                 String fieldName = ((ViewModelTextViewTextColorField) annotation).fieldName();
 
+                TextView view = (TextView) baseView.findViewById(resId);
+
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(consumeTextViewColorAction(resId));
+                ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(
+                        consumeTextViewColorAction(view));
                 field.setAccessible(isAccessible);
 
             }
@@ -193,9 +199,12 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelCheckBoxField) annotation).value();
                 String fieldName = ((ViewModelCheckBoxField) annotation).fieldName();
 
+                CheckBox view = (CheckBox) baseView.findViewById(resId);
+
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<Boolean>) field.get(BaseViewModel.this)).asObservable(consumeCheckBoxAction(resId));
+                ((Property<Boolean>) field.get(BaseViewModel.this)).asObservable(
+                        consumeCheckBoxAction(view));
                 field.setAccessible(isAccessible);
             }
         };
@@ -214,9 +223,12 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelHintEditTextField) annotation).value();
                 String fieldName = ((ViewModelHintEditTextField) annotation).fieldName();
 
+                EditText view = (EditText) baseView.findViewById(resId);
+
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<String>) field.get(BaseViewModel.this)).asObservable(consumeEditTextHintAction(resId));
+                ((Property<String>) field.get(BaseViewModel.this)).asObservable(
+                        consumeEditTextHintAction(view));
                 field.setAccessible(isAccessible);
             }
         };
@@ -235,9 +247,12 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelImageViewField) annotation).value();
                 String fieldName = ((ViewModelImageViewField) annotation).fieldName();
 
+                ImageView view = (ImageView) baseView.findViewById(resId);
+
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<Bitmap>) field.get(BaseViewModel.this)).asObservable(consumeImageViewAction(resId));
+                ((Property<Bitmap>) field.get(BaseViewModel.this)).asObservable(
+                        consumeImageViewAction(view));
                 field.setAccessible(isAccessible);
 
             }
@@ -257,9 +272,12 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelViewVisibilityField) annotation).value();
                 String fieldName = ((ViewModelViewVisibilityField) annotation).fieldName();
 
+                View view = baseView.findViewById(resId);
+
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
-                ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(consumeViewVisibilityAction(resId));
+                ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(
+                        consumeViewVisibilityAction(view));
                 field.setAccessible(isAccessible);
             }
         };
@@ -268,14 +286,13 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * Associate the text view annotation with the actual action to set text to view
      *
-     * @param resId the view resource Id
+     * @param textView the text view to change its text
      */
-    private Consumer<String> consumeTextViewAction(final int resId) {
+    private Consumer<String> consumeTextViewAction(final TextView textView) {
         return new Consumer<String>()
         {
             @Override
             public void accept(String textVal) throws Exception {
-                TextView textView = (TextView) baseView.findViewById(resId);
                 textView.setText(textVal);
             }
         };
@@ -285,14 +302,13 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * Associate the text view color annotation with the actual action to set text color to view
      *
-     * @param resId the view resource Id
+     * @param textView the view to change its color
      */
-    private Consumer<Integer> consumeTextViewColorAction(final int resId) {
+    private Consumer<Integer> consumeTextViewColorAction(final TextView textView) {
         return new Consumer<Integer>()
         {
             @Override
             public void accept(Integer textColorVal) throws Exception {
-                TextView textView = (TextView) baseView.findViewById(resId);
                 textView.setTextColor(textColorVal);
             }
         };
@@ -302,14 +318,13 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * Associate the Checkbox annotation with the actual action to set checkbox value to view
      *
-     * @param resId the view resource Id
+     * @param checkBox the check box to change its checking status
      */
-    private Consumer<Boolean> consumeCheckBoxAction(final int resId) {
+    private Consumer<Boolean> consumeCheckBoxAction(final CheckBox checkBox) {
         return new Consumer<Boolean>()
         {
             @Override
             public void accept(Boolean checkVal) throws Exception {
-                CheckBox checkBox = (CheckBox) baseView.findViewById(resId);
                 checkBox.setChecked(checkVal);
             }
         };
@@ -320,14 +335,13 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * Associate the editText hint annotation with the actual action to set hint value to edit text
      *
-     * @param resId the view resource Id
+     * @param editText the editor to change its hint text
      */
-    private Consumer<String> consumeEditTextHintAction(final int resId) {
+    private Consumer<String> consumeEditTextHintAction(final EditText editText) {
         return new Consumer<String>()
         {
             @Override
             public void accept(String hintText) throws Exception {
-                EditText editText = (EditText) baseView.findViewById(resId);
                 editText.setText(hintText);
             }
         };
@@ -336,14 +350,13 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * Associate the view visibility annotation with the actual action to set visbility
      *
-     * @param resId the view resource Id
+     * @param view the view to change its visibility
      */
-    private Consumer<Integer> consumeViewVisibilityAction(final int resId) {
+    private Consumer<Integer> consumeViewVisibilityAction(final View view) {
         return new Consumer<Integer>()
         {
             @Override
             public void accept(Integer visibility) throws Exception {
-                View view = baseView.findViewById(resId);
                 view.setVisibility(visibility);
             }
         };
@@ -353,14 +366,13 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     /**
      * Associate the view image annotation
      *
-     * @param resId the view resource Id
+     * @param imageView the image view to set its bitmap
      */
-    private Consumer<Bitmap> consumeImageViewAction(final int resId) {
+    private Consumer<Bitmap> consumeImageViewAction(final ImageView imageView) {
         return new Consumer<Bitmap>()
         {
             @Override
             public void accept(Bitmap bitmap) throws Exception {
-                ImageView imageView = (ImageView) baseView.findViewById(resId);
                 imageView.setImageBitmap(bitmap);
             }
         };
