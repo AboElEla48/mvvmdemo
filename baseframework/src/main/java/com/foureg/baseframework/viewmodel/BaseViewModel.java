@@ -15,17 +15,16 @@ import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextViewTex
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelViewVisibilityField;
 import com.foureg.baseframework.exceptions.ErrorInitializingFramework;
 import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
+import com.foureg.baseframework.types.Property;
 import com.foureg.baseframework.ui.interfaces.BaseView;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
-import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by aboelela on 06/01/18.
@@ -80,17 +79,17 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
     private Consumer<Annotation> getCorrespondingConsumerToAnnotation(Field field,
                                                                       Class<?> annotationType) throws Exception {
         if (annotationType.getName().equals(ViewModelTextField.class.getName())) {
-            return consumeTextViewAnnotation();
+            return createObservableForTextViewAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelTextViewTextColorField.class.getName())) {
-            return consumeTextViewColorAnnotation();
+            return createObservableForTextViewColorAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelCheckBoxField.class.getName())) {
-            return consumeCheckBoxAnnotation();
+            return createObservableForCheckBoxAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelHintEditTextField.class.getName())) {
-            return consumeEditTextHintAnnotation();
+            return createObservableForEditTextHintAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelImageViewField.class.getName())) {
-            return consumeImageViewAnnotation();
+            return createObservableForImageViewAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelViewVisibilityField.class.getName())) {
-            return consumeViewVisibilityAnnotation();
+            return createObservableForViewVisibilityAnnotation(field);
         }
 
         throw new ErrorInitializingFramework("Annotation in View Model not found!");
@@ -143,7 +142,7 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeTextViewAnnotation() {
+    private Consumer<Annotation> createObservableForTextViewAnnotation(final Field field) {
         return new Consumer<Annotation>()
         {
             @Override
@@ -151,11 +150,10 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelTextField) annotation).value();
                 String fieldName = ((ViewModelTextField) annotation).fieldName();
 
-                PublishSubject fieldPublishSubject = createTextViewPublishSubject(resId);
-
-                // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
-
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+                ((Property<String>) field.get(BaseViewModel.this)).asObservable(consumeTextViewAction(resId));
+                field.setAccessible(isAccessible);
             }
         };
     }
@@ -165,7 +163,7 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeTextViewColorAnnotation() {
+    private Consumer<Annotation> createObservableForTextViewColorAnnotation(final Field field) {
         return new Consumer<Annotation>()
         {
             @Override
@@ -173,11 +171,10 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelTextViewTextColorField) annotation).value();
                 String fieldName = ((ViewModelTextViewTextColorField) annotation).fieldName();
 
-                PublishSubject fieldPublishSubject = createTextViewTextColorPublishSubject(
-                        resId);
-
-                // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+                ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(consumeTextViewColorAction(resId));
+                field.setAccessible(isAccessible);
 
             }
         };
@@ -188,7 +185,7 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeCheckBoxAnnotation() {
+    private Consumer<Annotation> createObservableForCheckBoxAnnotation(final Field field) {
         return new Consumer<Annotation>()
         {
             @Override
@@ -196,12 +193,10 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelCheckBoxField) annotation).value();
                 String fieldName = ((ViewModelCheckBoxField) annotation).fieldName();
 
-                PublishSubject fieldPublishSubject = createCheckBoxPublishSubject(
-                        resId);
-
-                // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
-
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+                ((Property<Boolean>) field.get(BaseViewModel.this)).asObservable(consumeCheckBoxAction(resId));
+                field.setAccessible(isAccessible);
             }
         };
     }
@@ -211,7 +206,7 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeEditTextHintAnnotation() {
+    private Consumer<Annotation> createObservableForEditTextHintAnnotation(final Field field) {
         return new Consumer<Annotation>()
         {
             @Override
@@ -219,11 +214,10 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelHintEditTextField) annotation).value();
                 String fieldName = ((ViewModelHintEditTextField) annotation).fieldName();
 
-                PublishSubject fieldPublishSubject = createEditTextHintPublishSubject(resId);
-
-                // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
-
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+                ((Property<String>) field.get(BaseViewModel.this)).asObservable(consumeEditTextHintAction(resId));
+                field.setAccessible(isAccessible);
             }
         };
     }
@@ -233,7 +227,7 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeImageViewAnnotation() {
+    private Consumer<Annotation> createObservableForImageViewAnnotation(final Field field) {
         return new Consumer<Annotation>()
         {
             @Override
@@ -241,10 +235,10 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelImageViewField) annotation).value();
                 String fieldName = ((ViewModelImageViewField) annotation).fieldName();
 
-                PublishSubject fieldPublishSubject = createImageViewPublishSubject(resId);
-
-                // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+                ((Property<Bitmap>) field.get(BaseViewModel.this)).asObservable(consumeImageViewAction(resId));
+                field.setAccessible(isAccessible);
 
             }
         };
@@ -255,7 +249,7 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @return the consumer of annotation
      */
-    private Consumer<Annotation> consumeViewVisibilityAnnotation() {
+    private Consumer<Annotation> createObservableForViewVisibilityAnnotation(final Field field) {
         return new Consumer<Annotation>()
         {
             @Override
@@ -263,11 +257,10 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
                 int resId = ((ViewModelViewVisibilityField) annotation).value();
                 String fieldName = ((ViewModelViewVisibilityField) annotation).fieldName();
 
-                PublishSubject fieldPublishSubject = createViewVisibilityPublishSubject(resId);
-
-                // Add this view and its corresponding publish subject to actions map
-                viewModelFieldsActions.put(fieldName, fieldPublishSubject);
-
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+                ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(consumeViewVisibilityAction(resId));
+                field.setAccessible(isAccessible);
             }
         };
     }
@@ -277,19 +270,15 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<String> createTextViewPublishSubject(final int resId) {
-        PublishSubject<String> fieldPublishSubject = PublishSubject.create();
-
-        fieldPublishSubject.subscribe(new Consumer<String>()
+    private Consumer<String> consumeTextViewAction(final int resId) {
+        return new Consumer<String>()
         {
             @Override
             public void accept(String textVal) throws Exception {
                 TextView textView = (TextView) baseView.findViewById(resId);
                 textView.setText(textVal);
             }
-        });
-
-        return fieldPublishSubject;
+        };
 
     }
 
@@ -298,19 +287,15 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<Integer> createTextViewTextColorPublishSubject(final int resId) {
-        PublishSubject<Integer> fieldPublishSubject = PublishSubject.create();
-
-        fieldPublishSubject.subscribe(new Consumer<Integer>()
+    private Consumer<Integer> consumeTextViewColorAction(final int resId) {
+        return new Consumer<Integer>()
         {
             @Override
             public void accept(Integer textColorVal) throws Exception {
                 TextView textView = (TextView) baseView.findViewById(resId);
                 textView.setTextColor(textColorVal);
             }
-        });
-
-        return fieldPublishSubject;
+        };
 
     }
 
@@ -319,19 +304,16 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<Boolean> createCheckBoxPublishSubject(final int resId) {
-        PublishSubject<Boolean> fieldPublishSubject = PublishSubject.create();
-
-        fieldPublishSubject.subscribe(new Consumer<Boolean>()
+    private Consumer<Boolean> consumeCheckBoxAction(final int resId) {
+        return new Consumer<Boolean>()
         {
             @Override
             public void accept(Boolean checkVal) throws Exception {
                 CheckBox checkBox = (CheckBox) baseView.findViewById(resId);
                 checkBox.setChecked(checkVal);
             }
-        });
+        };
 
-        return fieldPublishSubject;
 
     }
 
@@ -340,20 +322,15 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<String> createEditTextHintPublishSubject(final int resId) {
-        PublishSubject<String> fieldPublishSubject = PublishSubject.create();
-
-        fieldPublishSubject.subscribe(new Consumer<String>()
+    private Consumer<String> consumeEditTextHintAction(final int resId) {
+        return new Consumer<String>()
         {
             @Override
             public void accept(String hintText) throws Exception {
                 EditText editText = (EditText) baseView.findViewById(resId);
                 editText.setText(hintText);
             }
-        });
-
-        return fieldPublishSubject;
-
+        };
     }
 
     /**
@@ -361,19 +338,15 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<Integer> createViewVisibilityPublishSubject(final int resId) {
-        PublishSubject<Integer> fieldPublishSubject = PublishSubject.create();
-
-        fieldPublishSubject.subscribe(new Consumer<Integer>()
+    private Consumer<Integer> consumeViewVisibilityAction(final int resId) {
+        return new Consumer<Integer>()
         {
             @Override
             public void accept(Integer visibility) throws Exception {
                 View view = baseView.findViewById(resId);
                 view.setVisibility(visibility);
             }
-        });
-
-        return fieldPublishSubject;
+        };
 
     }
 
@@ -382,54 +355,16 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
      *
      * @param resId the view resource Id
      */
-    private PublishSubject<Bitmap> createImageViewPublishSubject(final int resId) {
-        PublishSubject<Bitmap> fieldPublishSubject = PublishSubject.create();
-
-        fieldPublishSubject.subscribe(new Consumer<Bitmap>()
+    private Consumer<Bitmap> consumeImageViewAction(final int resId) {
+        return new Consumer<Bitmap>()
         {
             @Override
             public void accept(Bitmap bitmap) throws Exception {
                 ImageView imageView = (ImageView) baseView.findViewById(resId);
                 imageView.setImageBitmap(bitmap);
             }
-        });
-
-        return fieldPublishSubject;
-
+        };
     }
-
-
-    /**
-     * set the value of the field and trigger the corresponding action to update associated View
-     *
-     * @param fieldName : The field name in the view model to update
-     * @param value     : the value to be assigned to field
-     */
-    public void setValue(final String fieldName, final Object value) {
-        // Change the field value
-        Observable.fromIterable(Arrays.asList(this.getClass().getDeclaredFields()))
-                .filter(new Predicate<Field>()
-                {
-                    @Override
-                    public boolean test(Field field) throws Exception {
-                        return field.getName().equals(fieldName);
-                    }
-                })
-                .subscribe(new Consumer<Field>()
-                {
-                    @Override
-                    public void accept(Field field) throws Exception {
-                        boolean isAccessible = field.isAccessible();
-                        field.setAccessible(true);
-                        field.set(BaseViewModel.this, value);
-                        field.setAccessible(isAccessible);
-                    }
-                });
-
-        // trigger the corresponding change in view
-        viewModelFieldsActions.get(fieldName).onNext(value);
-    }
-
 
     /**
      * Check if field annotated with given annotation
@@ -449,5 +384,4 @@ public class BaseViewModel<V extends BaseView> /*implements FragmentLifeCycle, A
 
     private V baseView;
 
-    private HashMap<String, PublishSubject> viewModelFieldsActions = new HashMap<>();
 }

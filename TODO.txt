@@ -8,6 +8,7 @@
 * [Done] Pass lifecycle of activity/Fragment to view Presenter
 * Associate views in activity to corresponding values in ViewModel
 * Associate views in fragment to corresponding values in ViewModel
+* Assure fields in view model are initialized with values from view (default visibility, text val)
 * Set Arguments to fragments
 * Handle request permissions in base activity
 * Integrate MessageServer

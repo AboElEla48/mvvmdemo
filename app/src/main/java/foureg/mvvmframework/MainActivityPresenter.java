@@ -36,10 +36,10 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
                 {
                     @Override
                     public void accept(Object o) throws Exception {
-                        getView().getViewModel().setValue("activityTextViewTextVal",
+                        getView().getViewModel().getActivityTextViewTextVal().set(
                                 "Text from View Model after click");
                         Log.w(Constants.LOG_TAG, "activityTextViewTextVal = "
-                                + getView().getViewModel().getActivityTextViewTextVal());
+                                + getView().getViewModel().getActivityTextViewTextVal().get());
                     }
                 });
 
@@ -48,10 +48,10 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
                 {
                     @Override
                     public void accept(Object o) throws Exception {
-                        getView().getViewModel().setValue("visibilityViewVal", View.GONE);
+                        getView().getViewModel().getVisibilityViewVal().set(View.GONE);
 
                         Log.w(Constants.LOG_TAG, "visibilityViewVal = "
-                                + getView().getViewModel().getVisibilityViewVal());
+                                + getView().getViewModel().getVisibilityViewVal().get());
                     }
                 });
     }
