@@ -5,6 +5,6 @@ package com.foureg.baseframework.model;
  * This should be the parent model class for all models
  */
 
-public class BaseModel
+public class BaseDataModel
 {
 }

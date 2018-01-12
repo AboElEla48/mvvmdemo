@@ -1,7 +1,6 @@
 package com.foureg.baseframework.viewmodel;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.widget.CheckBox;
@@ -9,18 +8,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.foureg.baseframework.annotations.DataModel;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelCheckBoxField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelHintEditTextField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelImageViewField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextViewTextColorField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelViewVisibilityField;
+import com.foureg.baseframework.creators.FieldTypeCreator;
 import com.foureg.baseframework.exceptions.ErrorInitializingFramework;
+import com.foureg.baseframework.model.BaseDataModel;
 import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
 import com.foureg.baseframework.types.Property;
 import com.foureg.baseframework.ui.interfaces.BaseView;
-
-import org.w3c.dom.Text;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -45,12 +45,32 @@ public class BaseViewModel<V extends BaseView>
     public void initViewModel(V baseView) {
         this.baseView = baseView;
 
+        createFieldsAnnotatedAsDataModels();
+
         initViewModelFieldsAnnotatedAsCheckBoxField();
         initViewModelFieldsAnnotatedAsTextViewField();
         initViewModelFieldsAnnotatedAsTextViewTextColorField();
         initViewModelFieldsAnnotatedAsHintEditTextField();
         initViewModelFieldsAnnotatedAsImageViewField();
         initViewModelFieldsAnnotatedAsViewVisibilityField();
+    }
+
+    void createFieldsAnnotatedAsDataModels() {
+        FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(this,
+                DataModel.class,
+                new Consumer<Field>()
+                {
+                    @Override
+                    public void accept(Field field) throws Exception {
+                        // Create this field
+                        BaseDataModel baseDataModel = (BaseDataModel) FieldTypeCreator.createFieldObject(field);
+
+                        boolean isAccessible = field.isAccessible();
+                        field.setAccessible(true);
+                        field.set(BaseViewModel.this, baseDataModel);
+                        field.setAccessible(isAccessible);
+                    }
+                });
     }
 
     /**

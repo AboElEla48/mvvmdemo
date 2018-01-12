@@ -9,14 +9,14 @@ import java.lang.reflect.Field;
  * i.e. Field declared as String, will be created new String()
  */
 
-class FieldTypeCreator
+public class FieldTypeCreator
 {
     /**
      * Try to create field object according to declaration
      * @param field : the field where it is required to create its object
      * @return : the created object
      */
-    static Object createFieldObject(Field field) {
+    public static Object createFieldObject(Field field) {
         try {
             Constructor<?> fieldObjectConstructor = field.getType().getDeclaredConstructor();
             fieldObjectConstructor.setAccessible(true);

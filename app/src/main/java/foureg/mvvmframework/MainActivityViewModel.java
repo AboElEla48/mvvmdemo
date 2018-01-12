@@ -1,5 +1,6 @@
 package foureg.mvvmframework;
 
+import com.foureg.baseframework.annotations.DataModel;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextViewTextColorField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelViewVisibilityField;
@@ -21,6 +22,9 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
 
     @ViewModelViewVisibilityField(value = R.id.activity_visibility_view, fieldName = "visibilityViewVal")
     private Property<Integer> visibilityViewVal = new Property<>();
+
+    @DataModel
+    private DataModel dataModel;
 
     public Property<Integer> getActivityTextViewTextColorVal() {
         return activityTextViewTextColorVal;
