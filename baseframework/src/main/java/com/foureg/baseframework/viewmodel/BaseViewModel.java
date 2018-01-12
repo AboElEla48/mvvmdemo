@@ -177,13 +177,14 @@ public class BaseViewModel<V extends BaseView>
                 // get the associated view
                 TextView view = (TextView) baseView.findViewById(resId);
 
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+
                 // init view model field with value in the view
                 Property<String> viewModelProperty = ((Property<String>) field.get(BaseViewModel.this));
                 viewModelProperty.set(view.getText().toString());
 
                 // associate property with view
-                boolean isAccessible = field.isAccessible();
-                field.setAccessible(true);
                 viewModelProperty.asObservable(consumeTextViewAction(view));
                 field.setAccessible(isAccessible);
             }
@@ -206,13 +207,14 @@ public class BaseViewModel<V extends BaseView>
                 // get the associated view
                 TextView view = (TextView) baseView.findViewById(resId);
 
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+
                 // init view model field with value in the view
                 Property<Integer> viewModelProperty = ((Property<Integer>) field.get(BaseViewModel.this));
                 viewModelProperty.set(view.getCurrentTextColor());
 
                 // associate property with view
-                boolean isAccessible = field.isAccessible();
-                field.setAccessible(true);
                 viewModelProperty.asObservable(consumeTextViewColorAction(view));
                 field.setAccessible(isAccessible);
 
@@ -236,13 +238,14 @@ public class BaseViewModel<V extends BaseView>
                 // get the associated view
                 CheckBox view = (CheckBox) baseView.findViewById(resId);
 
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+
                 // init view model field with value in the view
                 Property<Boolean> viewModelProperty = ((Property<Boolean>) field.get(BaseViewModel.this));
                 viewModelProperty.set(view.isChecked());
 
                 // associate property with view
-                boolean isAccessible = field.isAccessible();
-                field.setAccessible(true);
                 viewModelProperty.asObservable(consumeCheckBoxAction(view));
                 field.setAccessible(isAccessible);
             }
@@ -265,13 +268,14 @@ public class BaseViewModel<V extends BaseView>
                 // get the associated view
                 EditText view = (EditText) baseView.findViewById(resId);
 
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+
                 // init view model field with value in the view
                 Property<String> viewModelProperty = ((Property<String>) field.get(BaseViewModel.this));
                 viewModelProperty.set(view.getHint().toString());
 
                 // associate property with view
-                boolean isAccessible = field.isAccessible();
-                field.setAccessible(true);
                 viewModelProperty.asObservable(consumeEditTextHintAction(view));
                 field.setAccessible(isAccessible);
             }
@@ -294,13 +298,14 @@ public class BaseViewModel<V extends BaseView>
                 // get the associated view
                 ImageView view = (ImageView) baseView.findViewById(resId);
 
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+
                 // init view model field with value in the view
                 Property<Bitmap> viewModelProperty = ((Property<Bitmap>) field.get(BaseViewModel.this));
                 viewModelProperty.set(((BitmapDrawable) view.getDrawable()).getBitmap());
 
                 // associate property with view
-                boolean isAccessible = field.isAccessible();
-                field.setAccessible(true);
                 viewModelProperty.asObservable(consumeImageViewAction(view));
                 field.setAccessible(isAccessible);
 

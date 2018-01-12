@@ -6,6 +6,8 @@
 * [Done] Pass lifecycle of fragment to view model
 * [Done] Scan all fields of fragment to initialize ViewModel fields
 * [Done] Pass lifecycle of activity/Fragment to view Presenter
+* [Done] Create Data Models fields in ViewModel
+* [Done] Create Data Models fields in ViewPresenter
 * Associate views in activity to corresponding values in ViewModel
 * Associate views in fragment to corresponding values in ViewModel
 * Assure fields in view model are initialized with values from view (default visibility, text val)

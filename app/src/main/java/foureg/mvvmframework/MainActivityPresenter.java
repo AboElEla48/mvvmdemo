@@ -36,8 +36,16 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
                 {
                     @Override
                     public void accept(Object o) throws Exception {
+
+                        // get default text currently in text view
+                        Log.w(Constants.LOG_TAG, "activityTextViewTextVal = "
+                                + getView().getViewModel().getActivityTextViewTextVal().get());
+
+                        // Change text in text view
                         getView().getViewModel().getActivityTextViewTextVal().set(
-                                "Text from View Model after click");
+                                "ViewModel Str + " +  getView().getViewModel().dataModel.getDataStr());
+
+                        // Assure text changed
                         Log.w(Constants.LOG_TAG, "activityTextViewTextVal = "
                                 + getView().getViewModel().getActivityTextViewTextVal().get());
                     }

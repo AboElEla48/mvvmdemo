@@ -24,7 +24,7 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
     private Property<Integer> visibilityViewVal = new Property<>();
 
     @DataModel
-    private DataModel dataModel;
+    foureg.mvvmframework.data.DataModel dataModel;
 
     public Property<Integer> getActivityTextViewTextColorVal() {
         return activityTextViewTextColorVal;
