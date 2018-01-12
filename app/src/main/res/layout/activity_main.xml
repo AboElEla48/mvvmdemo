@@ -22,11 +22,11 @@
             android:background="@color/colorAccent"/>
 
         <Button
-            android:id="@+id/activity_visibility_hide_btn"
+            android:id="@+id/activity_visibility_show_hide_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Hide View"/>
+            android:text="Show/Hide View"/>
 
     </LinearLayout>
 

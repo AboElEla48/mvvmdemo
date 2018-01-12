@@ -332,6 +332,11 @@ public class BaseViewModel<V extends BaseView>
                 // associate property with view
                 boolean isAccessible = field.isAccessible();
                 field.setAccessible(true);
+
+                // init view model field with value in the view
+                Property<Integer> viewModelProperty = ((Property<Integer>) field.get(BaseViewModel.this));
+                viewModelProperty.set(view.getVisibility());
+
                 ((Property<Integer>) field.get(BaseViewModel.this)).asObservable(
                         consumeViewVisibilityAction(view));
                 field.setAccessible(isAccessible);

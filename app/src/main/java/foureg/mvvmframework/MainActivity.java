@@ -28,6 +28,6 @@ public class MainActivity extends BaseActivity<MainActivityViewModel>
     @ViewId(R.id.activity_visibility_view)
     View visibilityView;
 
-    @ViewId(R.id.activity_visibility_hide_btn)
-    Button hideViewBtn;
+    @ViewId(R.id.activity_visibility_show_hide_btn)
+    Button showHideViewBtn;
 }

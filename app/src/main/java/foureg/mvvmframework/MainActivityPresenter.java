@@ -24,42 +24,67 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
         super.onCreate(savedInstanceState);
         Log.w(Constants.LOG_TAG, "MainActivityPresenter::onCreate");
 
-        getView().helloTextView.setText("Text From Presenter");
-
         // set fragment to activity
         FragmentTransaction transaction = getView().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.activity_fragment_placeholder, new MainFragment());
         transaction.commit();
 
+        // change text view string
+        changeTextViewString();
+
+        // Show/Hide annotation
+        showHideView();
+    }
+
+    private void showHideView() {
+        RxView.clicks(getView().showHideViewBtn)
+                .subscribe(new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Log.w(Constants.LOG_TAG, "***********************");
+                        Log.w(Constants.LOG_TAG, "visibility Values: ");
+                        Log.w(Constants.LOG_TAG, "Visible = " + View.VISIBLE);
+                        Log.w(Constants.LOG_TAG, "Gone = " + View.GONE);
+                        Log.w(Constants.LOG_TAG, "INVISIBLE = " + View.INVISIBLE);
+
+                        Log.w(Constants.LOG_TAG, "Initial Visibility: " +
+                                getView().getViewModel().getVisibilityViewVal().get());
+
+                        int visibility = getView().getViewModel().getVisibilityViewVal().get() ==
+                                View.VISIBLE ? View.GONE : View.VISIBLE;
+                        getView().getViewModel().getVisibilityViewVal().set(visibility);
+
+                        Log.w(Constants.LOG_TAG, "Visibility after change = "
+                                + getView().getViewModel().getVisibilityViewVal().get());
+                        Log.w(Constants.LOG_TAG, "***********************");
+                    }
+                });
+    }
+
+    private void changeTextViewString() {
+        // Change text view content
         RxView.clicks(getView().changeTextBtn)
                 .subscribe(new Consumer<Object>()
                 {
                     @Override
                     public void accept(Object o) throws Exception {
 
+                        Log.w(Constants.LOG_TAG, "***********************");
+
                         // get default text currently in text view
-                        Log.w(Constants.LOG_TAG, "activityTextViewTextVal = "
+                        Log.w(Constants.LOG_TAG, "Initial value in view mode text field = "
                                 + getView().getViewModel().getActivityTextViewTextVal().get());
 
                         // Change text in text view
                         getView().getViewModel().getActivityTextViewTextVal().set(
-                                "ViewModel Str + " +  getView().getViewModel().dataModel.getDataStr());
+                                "ViewModel Str + " + getView().getViewModel().dataModel.getDataStr());
 
                         // Assure text changed
-                        Log.w(Constants.LOG_TAG, "activityTextViewTextVal = "
+                        Log.w(Constants.LOG_TAG, "View Model text field after change = "
                                 + getView().getViewModel().getActivityTextViewTextVal().get());
-                    }
-                });
 
-        RxView.clicks(getView().hideViewBtn)
-                .subscribe(new Consumer<Object>()
-                {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        getView().getViewModel().getVisibilityViewVal().set(View.GONE);
-
-                        Log.w(Constants.LOG_TAG, "visibilityViewVal = "
-                                + getView().getViewModel().getVisibilityViewVal().get());
+                        Log.w(Constants.LOG_TAG, "***********************");
                     }
                 });
     }
