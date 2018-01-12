@@ -43,6 +43,28 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
 
         // Editor Hint text value
         changeEditorHintVal();
+
+        // Editor hint color value
+        changeHintTextColor();
+    }
+
+    private void changeHintTextColor() {
+        RxView.clicks(getView().changeEditorHintColorBtn)
+                .subscribe(new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Log.w(Constants.LOG_TAG, "***********************");
+                        Log.w(Constants.LOG_TAG, "Initial hint color = "
+                                + getView().getViewModel().getEditorHintColor().get());
+
+                        getView().getViewModel().getEditorHintColor().set(0xFF00FFFF);
+
+                        Log.w(Constants.LOG_TAG, "Hint color after change = "
+                                + getView().getViewModel().getEditorHintColor().get());
+                        Log.w(Constants.LOG_TAG, "***********************");
+                    }
+                });
     }
 
     private void changeEditorHintVal() {

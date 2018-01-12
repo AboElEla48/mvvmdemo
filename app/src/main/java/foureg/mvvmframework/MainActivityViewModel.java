@@ -2,6 +2,7 @@ package foureg.mvvmframework;
 
 import com.foureg.baseframework.annotations.DataModel;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelCheckBoxField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelHintEditTextColorField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelHintEditTextField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextViewTextColorField;
@@ -31,6 +32,9 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
     @ViewModelHintEditTextField(value = R.id.activity_edit_view, fieldName = "EditorView")
     private Property<String> editorHintVal = new Property<>();
 
+    @ViewModelHintEditTextColorField(value = R.id.activity_edit_view, fieldName = "HintColor")
+    private Property<Integer> editorHintColor = new Property<>();
+
     @DataModel
     foureg.mvvmframework.data.DataModel dataModel;
 
@@ -48,4 +52,6 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
     Property<Boolean> getCheckBoxVal() { return checkBoxVal; }
 
     Property<String> getEditorHintVal() { return editorHintVal; }
+
+    Property<Integer> getEditorHintColor() { return editorHintColor; }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.foureg.baseframework.annotations.DataModel;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelCheckBoxField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelHintEditTextColorField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelHintEditTextField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelImageViewField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextField;
@@ -51,6 +52,7 @@ public class BaseViewModel<V extends BaseView>
         initViewModelFieldsAnnotatedAsTextViewField();
         initViewModelFieldsAnnotatedAsTextViewTextColorField();
         initViewModelFieldsAnnotatedAsHintEditTextField();
+        initViewModelFieldsAnnotatedAsHintEditTextColorField();
         initViewModelFieldsAnnotatedAsImageViewField();
         initViewModelFieldsAnnotatedAsViewVisibilityField();
     }
@@ -110,6 +112,8 @@ public class BaseViewModel<V extends BaseView>
             return createObservableForCheckBoxAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelHintEditTextField.class.getName())) {
             return createObservableForEditTextHintAnnotation(field);
+        } else if (annotationType.getName().equals(ViewModelHintEditTextColorField.class.getName())) {
+            return createObservableForEditTextHintColorAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelImageViewField.class.getName())) {
             return createObservableForImageViewAnnotation(field);
         } else if (annotationType.getName().equals(ViewModelViewVisibilityField.class.getName())) {
@@ -145,6 +149,13 @@ public class BaseViewModel<V extends BaseView>
      */
     private void initViewModelFieldsAnnotatedAsHintEditTextField() {
         processFieldOfAnnotation(ViewModelHintEditTextField.class);
+    }
+
+    /**
+     * scan fields annotated as EditText Color fields to associate it with hint text color
+     */
+    private void initViewModelFieldsAnnotatedAsHintEditTextColorField() {
+        processFieldOfAnnotation(ViewModelHintEditTextColorField.class);
     }
 
     /**
@@ -283,6 +294,36 @@ public class BaseViewModel<V extends BaseView>
     }
 
     /**
+     * create Edit Text Hint Color annotation consumer
+     *
+     * @return the consumer of annotation
+     */
+    private Consumer<Annotation> createObservableForEditTextHintColorAnnotation(final Field field) {
+        return new Consumer<Annotation>()
+        {
+            @Override
+            public void accept(Annotation annotation) throws Exception {
+                int resId = ((ViewModelHintEditTextColorField) annotation).value();
+                String fieldName = ((ViewModelHintEditTextColorField) annotation).fieldName();
+
+                // get the associated view
+                EditText view = (EditText) baseView.findViewById(resId);
+
+                boolean isAccessible = field.isAccessible();
+                field.setAccessible(true);
+
+                // init view model field with value in the view
+                Property<Integer> viewModelProperty = ((Property<Integer>) field.get(BaseViewModel.this));
+                viewModelProperty.set(view.getCurrentHintTextColor());
+
+                // associate property with view
+                viewModelProperty.asObservable(consumeEditTextHintColorAction(view));
+                field.setAccessible(isAccessible);
+            }
+        };
+    }
+
+    /**
      * create Image view annotation consumer
      *
      * @return the consumer of annotation
@@ -404,6 +445,22 @@ public class BaseViewModel<V extends BaseView>
             @Override
             public void accept(String hintText) throws Exception {
                 editText.setText(hintText);
+            }
+        };
+    }
+
+    /**
+     * Associate the editText hint color annotation with the actual action to set hint color to
+     * edit text
+     *
+     * @param editText the editor to change its hint text
+     */
+    private Consumer<Integer> consumeEditTextHintColorAction(final EditText editText) {
+        return new Consumer<Integer>()
+        {
+            @Override
+            public void accept(Integer hintTextColor) throws Exception {
+                editText.setHintTextColor(hintTextColor);
             }
         };
     }
