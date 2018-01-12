@@ -62,6 +62,55 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_view_checkBox"
+        android:layout_below="@id/layout_view_visibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/activity_check_box_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Option"
+            android:checked="false"/>
+
+        <Button
+            android:id="@+id/activity_change_check_box_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Check/Uncheck"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_view_hint_text"
+        android:layout_below="@id/layout_view_checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/activity_edit_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="initial hint text"/>
+
+        <Button
+            android:id="@+id/activity_change_editor_hint_text_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change editor hint"/>
+
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/activity_fragment_placeholder"
         android:layout_width="match_parent"

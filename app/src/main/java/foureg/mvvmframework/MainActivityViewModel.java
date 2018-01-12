@@ -1,6 +1,8 @@
 package foureg.mvvmframework;
 
 import com.foureg.baseframework.annotations.DataModel;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelCheckBoxField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelHintEditTextField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextViewTextColorField;
 import com.foureg.baseframework.annotations.viewmodelfields.ViewModelViewVisibilityField;
@@ -23,6 +25,12 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
     @ViewModelViewVisibilityField(value = R.id.activity_visibility_view, fieldName = "visibilityViewVal")
     private Property<Integer> visibilityViewVal = new Property<>();
 
+    @ViewModelCheckBoxField(value = R.id.activity_check_box_view, fieldName = "CheckBoxView")
+    private Property<Boolean> checkBoxVal = new Property<>();
+
+    @ViewModelHintEditTextField(value = R.id.activity_edit_view, fieldName = "EditorView")
+    private Property<String> editorHintVal = new Property<>();
+
     @DataModel
     foureg.mvvmframework.data.DataModel dataModel;
 
@@ -36,4 +44,8 @@ class MainActivityViewModel extends BaseViewModel<MainActivity>
     Property<Integer> getVisibilityViewVal() {
         return visibilityViewVal;
     }
+
+    Property<Boolean> getCheckBoxVal() { return checkBoxVal; }
+
+    Property<String> getEditorHintVal() { return editorHintVal; }
 }

@@ -37,6 +37,51 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
 
         // Show/Hide annotation
         showHideView();
+
+        // Check/Uncheck checkbox
+        ChangeCheckBoxVal();
+
+        // Editor Hint text value
+        changeEditorHintVal();
+    }
+
+    private void changeEditorHintVal() {
+        RxView.clicks(getView().changeEditorHintBtn)
+                .subscribe(new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Log.w(Constants.LOG_TAG, "***********************");
+                        Log.w(Constants.LOG_TAG, "Initial Hint text value = "
+                                + getView().getViewModel().getEditorHintVal().get());
+
+                        getView().getViewModel().getEditorHintVal().set("New Hint Text");
+
+                        Log.w(Constants.LOG_TAG, "Hint text value after change = "
+                                + getView().getViewModel().getEditorHintVal().get());
+                        Log.w(Constants.LOG_TAG, "***********************");
+                    }
+                });
+    }
+
+    private void ChangeCheckBoxVal() {
+        RxView.clicks(getView().changeCheckBoxBtn)
+                .subscribe(new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Log.w(Constants.LOG_TAG, "***********************");
+                        Log.w(Constants.LOG_TAG, "Initial Check Box val = "
+                                + getView().getViewModel().getCheckBoxVal().get());
+
+                        Boolean isChecked = !getView().getViewModel().getCheckBoxVal().get();
+                        getView().getViewModel().getCheckBoxVal().set(isChecked);
+
+                        Log.w(Constants.LOG_TAG, "CheckBox value after change = "
+                                + getView().getViewModel().getCheckBoxVal().get());
+                        Log.w(Constants.LOG_TAG, "***********************");
+                    }
+                });
     }
 
     private void changeTextColor() {

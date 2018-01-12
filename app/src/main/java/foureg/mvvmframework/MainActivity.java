@@ -2,6 +2,8 @@ package foureg.mvvmframework;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.foureg.baseframework.annotations.ContentViewId;
@@ -33,4 +35,16 @@ public class MainActivity extends BaseActivity<MainActivityViewModel>
 
     @ViewId(R.id.activity_visibility_show_hide_btn)
     Button showHideViewBtn;
+
+    @ViewId(R.id.activity_check_box_view)
+    CheckBox checkBoxView;
+
+    @ViewId(R.id.activity_change_check_box_btn)
+    Button changeCheckBoxBtn;
+
+    @ViewId(R.id.activity_edit_view)
+    EditText editorView;
+
+    @ViewId(R.id.activity_change_editor_hint_text_btn)
+    Button changeEditorHintBtn;
 }
