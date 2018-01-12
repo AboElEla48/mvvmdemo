@@ -27,6 +27,13 @@ import io.reactivex.functions.Consumer;
 public class BaseViewPresenter<V extends BaseView> implements FragmentLifeCycle, ActivityLifeCycle
 {
     /**
+     * In case the view is fragment, then this method will be called instead of Create View
+     */
+    public void initFragmentValues() {
+
+    }
+
+    /**
      * init presenter
      * @param baseView : the corresponding view
      */

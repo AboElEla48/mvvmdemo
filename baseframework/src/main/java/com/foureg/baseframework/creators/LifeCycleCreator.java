@@ -66,13 +66,15 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
             // init fields in base view (Associate vars with its views from xml)
             // At this step the activity is initialized with its XML but fragment not initialized yet
             createFieldsAnnotatedAsViewId(baseView);
+
+            // init view presenter field
+            createFieldAnnotatedAsViewPresenter(baseView);
+
+            // init view model field
+            createFieldAnnotatedAsViewModel(baseView);
         }
 
-        // init view presenter field
-        createFieldAnnotatedAsViewPresenter(baseView);
 
-        // init view model field
-        createFieldAnnotatedAsViewModel(baseView);
 
         if (baseViewPresenter != null) {
             // make lifecycle calls
@@ -88,10 +90,16 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         if (baseView != null) {
             // init fields in base view (Associate vars with its views from xml)
             createFieldsAnnotatedAsViewId(baseView);
+
+            // init view presenter field
+            createFieldAnnotatedAsViewPresenter(baseView);
+
+            // init view model field
+            createFieldAnnotatedAsViewModel(baseView);
         }
 
         if (baseViewPresenter != null) {
-            baseViewPresenter.onCreateView(inflater, container, savedInstanceState);
+            baseViewPresenter.initFragmentValues();
         }
 
         return null;

@@ -30,7 +30,7 @@ public class BaseFragment<VM extends BaseViewModel> extends Fragment implements 
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public final void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lifeCycleCreator = new LifeCycleCreator(this);
         lifeCycleCreator.onCreate(savedInstanceState);

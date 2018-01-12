@@ -1,14 +1,38 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@color/colorGrey"
+              android:orientation="vertical"
              tools:context="foureg.mvvmframework.fragment.MainFragment">
 
-    <TextView
-        android:id="@+id/fragment_text_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/fragment_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/hello_blank_fragment"/>
+
+        <Button
+            android:id="@+id/fragment_change_text_value_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change Text value"/>
+
+        <Button
+            android:id="@+id/fragment_change_text_color_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change Text Color"/>
+    </LinearLayout>
+
+
+</LinearLayout>
