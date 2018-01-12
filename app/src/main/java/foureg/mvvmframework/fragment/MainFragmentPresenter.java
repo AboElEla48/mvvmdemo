@@ -20,8 +20,6 @@ public class MainFragmentPresenter extends BaseViewPresenter<MainFragment>
                              @Nullable Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
 
-        getView().fragmentTextView.setText("Text From Fragment Presenter");
-
         return v;
     }
 }

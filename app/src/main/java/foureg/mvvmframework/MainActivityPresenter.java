@@ -32,8 +32,32 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
         // change text view string
         changeTextViewString();
 
+        // Change text color in text view
+        changeTextColor();
+
         // Show/Hide annotation
         showHideView();
+    }
+
+    private void changeTextColor() {
+        RxView.clicks(getView().changeTextColorBtn)
+                .subscribe(new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Log.w(Constants.LOG_TAG, "***********************");
+
+                        Log.w(Constants.LOG_TAG, "Initial Text Color: "
+                                + getView().getViewModel().getTextColor().get());
+
+                        getView().getViewModel().getTextColor().set(0xFFFF0000);
+
+                        Log.w(Constants.LOG_TAG, "Text Color after change: "
+                                + getView().getViewModel().getTextColor().get());
+
+                        Log.w(Constants.LOG_TAG, "***********************");
+                    }
+                });
     }
 
     private void showHideView() {
@@ -74,15 +98,15 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
 
                         // get default text currently in text view
                         Log.w(Constants.LOG_TAG, "Initial value in view mode text field = "
-                                + getView().getViewModel().getActivityTextViewTextVal().get());
+                                + getView().getViewModel().getTextVal().get());
 
                         // Change text in text view
-                        getView().getViewModel().getActivityTextViewTextVal().set(
+                        getView().getViewModel().getTextVal().set(
                                 "ViewModel Str + " + getView().getViewModel().dataModel.getDataStr());
 
                         // Assure text changed
                         Log.w(Constants.LOG_TAG, "View Model text field after change = "
-                                + getView().getViewModel().getActivityTextViewTextVal().get());
+                                + getView().getViewModel().getTextVal().get());
 
                         Log.w(Constants.LOG_TAG, "***********************");
                     }

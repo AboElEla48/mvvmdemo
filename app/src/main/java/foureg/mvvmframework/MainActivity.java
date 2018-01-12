@@ -25,6 +25,9 @@ public class MainActivity extends BaseActivity<MainActivityViewModel>
     @ViewId(R.id.activity_change_text_value_btn)
     Button changeTextBtn;
 
+    @ViewId(R.id.activity_change_text_color_btn)
+    Button changeTextColorBtn;
+
     @ViewId(R.id.activity_visibility_view)
     View visibilityView;
 

@@ -8,6 +8,38 @@
     tools:context="foureg.mvvmframework.MainActivity">
 
     <LinearLayout
+        android:id="@+id/layout_text_val"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/activity_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hello World!"/>
+
+        <Button
+            android:id="@+id/activity_change_text_value_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change Text value"/>
+
+        <Button
+            android:id="@+id/activity_change_text_color_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change Text Color"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_view_visibility"
+        android:layout_below="@id/layout_text_val"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
@@ -30,25 +62,10 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/activity_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:layout_centerInParent="true"/>
-
-    <Button
-        android:id="@+id/activity_change_text_value_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/activity_text_view"
-        android:layout_centerHorizontal="true"
-        android:text="Change Text value"/>
-
     <FrameLayout
         android:id="@+id/activity_fragment_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/activity_text_view"/>
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
