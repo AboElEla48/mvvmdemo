@@ -18,4 +18,5 @@ import java.lang.annotation.Target;
 public @interface ViewModelViewVisibilityField
 {
     int value();
+    String fieldName();
 }

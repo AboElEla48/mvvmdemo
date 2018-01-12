@@ -1,21 +1,27 @@
-package foureg.mvvmframework;
+package foureg.mvvmframework.fragment;
 
 import android.widget.TextView;
 
 import com.foureg.baseframework.annotations.ContentViewId;
 import com.foureg.baseframework.annotations.ViewId;
 import com.foureg.baseframework.annotations.ViewModel;
+import com.foureg.baseframework.annotations.ViewPresenter;
 import com.foureg.baseframework.ui.BaseFragment;
+
+import foureg.mvvmframework.R;
 
 
 /**
  * Sample fragment
  */
 @ContentViewId(R.layout.fragment_main)
-public class MainFragment extends BaseFragment
+public class MainFragment extends BaseFragment<MainFragmentViewModel>
 {
     @ViewModel
-    MainFragmentViewModel viewMode;
+    MainFragmentViewModel viewModel;
+
+    @ViewPresenter
+    MainFragmentPresenter mainFragmentPresenter;
 
     @ViewId(R.id.fragment_text_view)
     TextView fragmentTextView;

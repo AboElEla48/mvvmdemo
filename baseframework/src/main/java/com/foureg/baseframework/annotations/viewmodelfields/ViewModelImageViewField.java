@@ -18,4 +18,5 @@ import java.lang.annotation.Target;
 public @interface ViewModelImageViewField
 {
     int value();
+    String fieldName();
 }

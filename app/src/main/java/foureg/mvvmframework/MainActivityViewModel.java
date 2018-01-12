@@ -1,10 +1,13 @@
 package foureg.mvvmframework;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-
+import com.foureg.baseframework.annotations.DataModel;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelCheckBoxField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelHintEditTextColorField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelHintEditTextField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelTextViewTextColorField;
+import com.foureg.baseframework.annotations.viewmodelfields.ViewModelViewVisibilityField;
+import com.foureg.baseframework.types.Property;
 import com.foureg.baseframework.viewmodel.BaseViewModel;
 
 /**
@@ -14,15 +17,41 @@ import com.foureg.baseframework.viewmodel.BaseViewModel;
 
 class MainActivityViewModel extends BaseViewModel<MainActivity>
 {
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.w(Constants.LOG_TAG, "MainActivityViewModel::onCreate");
+    @ViewModelTextField(value = R.id.activity_text_view, fieldName = "textVal")
+    private Property<String> textVal = new Property<>();
 
-        getView().helloTextView.setText("Text From View Model");
+    @ViewModelTextViewTextColorField(value = R.id.activity_text_view, fieldName = "textColor")
+    private Property<Integer> textColor = new Property<>();
 
-        FragmentTransaction transaction = getView().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.activity_fragment_placeholder, new MainFragment());
-        transaction.commit();
+    @ViewModelViewVisibilityField(value = R.id.activity_visibility_view, fieldName = "visibilityViewVal")
+    private Property<Integer> visibilityViewVal = new Property<>();
+
+    @ViewModelCheckBoxField(value = R.id.activity_check_box_view, fieldName = "CheckBoxView")
+    private Property<Boolean> checkBoxVal = new Property<>();
+
+    @ViewModelHintEditTextField(value = R.id.activity_edit_view, fieldName = "EditorView")
+    private Property<String> editorHintVal = new Property<>();
+
+    @ViewModelHintEditTextColorField(value = R.id.activity_edit_view, fieldName = "HintColor")
+    private Property<Integer> editorHintColor = new Property<>();
+
+    @DataModel
+    foureg.mvvmframework.data.DataModel dataModel;
+
+
+    Property<String> getTextVal() {
+        return textVal;
     }
+
+    Property<Integer> getTextColor() { return textColor; }
+
+    Property<Integer> getVisibilityViewVal() {
+        return visibilityViewVal;
+    }
+
+    Property<Boolean> getCheckBoxVal() { return checkBoxVal; }
+
+    Property<String> getEditorHintVal() { return editorHintVal; }
+
+    Property<Integer> getEditorHintColor() { return editorHintColor; }
 }

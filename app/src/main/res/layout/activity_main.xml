@@ -7,17 +7,121 @@
     android:background="@color/colorGreen"
     tools:context="foureg.mvvmframework.MainActivity">
 
-    <TextView
-        android:id="@+id/activity_text_view"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layout_text_val"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:layout_centerInParent="true"/>
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/activity_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hello World!"/>
+
+        <Button
+            android:id="@+id/activity_change_text_value_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change Text value"/>
+
+        <Button
+            android:id="@+id/activity_change_text_color_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change Text Color"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_view_visibility"
+        android:layout_below="@id/layout_text_val"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/activity_visibility_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="This is visibility View"
+            android:background="@color/colorAccent"/>
+
+        <Button
+            android:id="@+id/activity_visibility_show_hide_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Show/Hide View"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_view_checkBox"
+        android:layout_below="@id/layout_view_visibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/activity_check_box_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Option"
+            android:checked="false"/>
+
+        <Button
+            android:id="@+id/activity_change_check_box_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Check/Uncheck"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_view_hint_text"
+        android:layout_below="@id/layout_view_checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="3"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/activity_edit_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="initial hint text"/>
+
+        <Button
+            android:id="@+id/activity_change_editor_hint_text_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change hint"/>
+
+        <Button
+            android:id="@+id/activity_change_editor_hint_text_color_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Change hint color"/>
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/activity_fragment_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/activity_text_view"/>
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

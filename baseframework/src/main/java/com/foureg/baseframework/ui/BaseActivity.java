@@ -9,6 +9,7 @@ import android.view.View;
 import com.foureg.baseframework.creators.LifeCycleCreator;
 import com.foureg.baseframework.scanners.ContentViewIDScanner;
 import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
+import com.foureg.baseframework.viewmodel.BaseViewModel;
 
 import io.reactivex.functions.Consumer;
 
@@ -17,7 +18,7 @@ import io.reactivex.functions.Consumer;
  * This should be the base class for all activities
  */
 
-public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
+public class BaseActivity<VM extends BaseViewModel> extends AppCompatActivity implements ActivityLifeCycle
 {
     @Override
     public final void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -35,6 +36,15 @@ public class BaseActivity extends AppCompatActivity implements ActivityLifeCycle
         });
 
 
+    }
+
+    /**
+     * get the view model associated with view
+     *
+     * @return : the view model associated with view
+     */
+    public VM getViewModel() {
+        return (VM)lifeCycleCreator.getViewModel();
     }
 
     private void initActivity(Bundle savedInstanceState) {

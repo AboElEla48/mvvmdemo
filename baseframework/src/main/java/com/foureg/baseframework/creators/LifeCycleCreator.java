@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.foureg.baseframework.annotations.ViewModel;
+import com.foureg.baseframework.annotations.ViewPresenter;
 import com.foureg.baseframework.exceptions.ErrorInitializingFramework;
 import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
 import com.foureg.baseframework.ui.BaseActivity;
+import com.foureg.baseframework.ui.BaseViewPresenter;
 import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
 import com.foureg.baseframework.ui.interfaces.BaseView;
 import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
@@ -30,11 +32,14 @@ import io.reactivex.functions.Consumer;
 
 public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
 {
-    // Hold object of baseViewModel to pass all calls of lifecycle to it
+    // Hold object of baseViewModel
     private BaseViewModel baseViewModel;
 
     // Hold object of the hosted view (Activity/fragment)
     private WeakReference<ViewLifeCycle> hostViews;
+
+    // Hold object to view presenter to pass view calls to it
+    private BaseViewPresenter baseViewPresenter;
 
     /**
      * Initialize the host view
@@ -45,6 +50,10 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         hostViews = new WeakReference<>(hostView);
     }
 
+    public BaseViewModel getViewModel() {
+        return baseViewModel;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         // Initialize the view model to receive lifecycle calls
@@ -53,19 +62,39 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
             throw new ErrorInitializingFramework("BaseView is null. Can't initializes life cycle creator"); // stop execution
         }
 
-        if(baseView instanceof BaseActivity) {
+        if (baseView instanceof BaseActivity) {
             // init fields in base view (Associate vars with its views from xml)
             // At this step the activity is initialized with its XML but fragment not initialized yet
             createFieldsAnnotatedAsViewId(baseView);
         }
 
+        // init view presenter field
+        createFieldAnnotatedAsViewPresenter(baseView);
+
         // init view model field
         createFieldAnnotatedAsViewModel(baseView);
 
-        if (baseViewModel != null) {
+        if (baseViewPresenter != null) {
             // make lifecycle calls
-            baseViewModel.onCreate(savedInstanceState);
+            baseViewPresenter.onCreate(savedInstanceState);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        BaseView baseView = hostViews.get();
+        if (baseView != null) {
+            // init fields in base view (Associate vars with its views from xml)
+            createFieldsAnnotatedAsViewId(baseView);
+        }
+
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onCreateView(inflater, container, savedInstanceState);
+        }
+
+        return null;
     }
 
     /**
@@ -101,96 +130,104 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
 
     }
 
+    /**
+     * Create fields annotated as View Presenter
+     *
+     * @param baseView : the host view
+     */
+    private void createFieldAnnotatedAsViewPresenter(final BaseView baseView) {
+        // Iterated fields on base view search for fields annotated as ViewModel, then create it
+
+        FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(baseView, ViewPresenter.class,
+                new Consumer<Field>()
+                {
+                    @Override
+                    public void accept(Field viewPresenterField) throws Exception {
+                        // create base view model
+                        baseViewPresenter = (BaseViewPresenter) FieldTypeCreator.createFieldObject(viewPresenterField);
+                        if (baseViewPresenter != null) {
+                            baseViewPresenter.initViewPresenter(baseView);
+                        }
+
+                    }
+                });
+
+
+    }
+
     @Override
     public void onStart() {
-        if (baseViewModel != null) {
-            baseViewModel.onStart();
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onStart();
         }
     }
 
     @Override
     public void onResume() {
-        if (baseViewModel != null) {
-            baseViewModel.onResume();
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onResume();
         }
     }
 
     @Override
     public void onPause() {
-        if (baseViewModel != null) {
-            baseViewModel.onPause();
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onPause();
         }
     }
 
     @Override
     public void onRestart() {
-        if (baseViewModel != null) {
-            baseViewModel.onRestart();
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onRestart();
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (baseViewModel != null) {
-            baseViewModel.onActivityResult(requestCode, resultCode, data);
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     @Override
     public boolean onActivityBackPressed() {
-        return baseViewModel != null && baseViewModel.onActivityBackPressed();
+        return baseViewPresenter != null && baseViewPresenter.onActivityBackPressed();
     }
 
     @Override
     public void onStop() {
-        if (baseViewModel != null) {
-            baseViewModel.onStop();
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onStop();
         }
     }
 
     @Override
     public void onDestroy() {
-        if (baseViewModel != null) {
-            baseViewModel.onDestroy();
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onDestroy();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if (baseViewModel != null) {
-            baseViewModel.onSaveInstanceState(outState);
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onSaveInstanceState(outState);
         }
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (baseViewModel != null) {
-            baseViewModel.onRestoreInstanceState(savedInstanceState);
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onRestoreInstanceState(savedInstanceState);
         }
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        BaseView baseView = hostViews.get();
-        if(baseView != null) {
-            // init fields in base view (Associate vars with its views from xml)
-            createFieldsAnnotatedAsViewId(baseView);
-        }
-
-        if (baseViewModel != null) {
-            baseViewModel.onCreateView(inflater, container, savedInstanceState);
-        }
-
-        return null;
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        if (baseViewModel != null) {
-            baseViewModel.onActivityCreated(savedInstanceState);
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onActivityCreated(savedInstanceState);
         }
     }
 
@@ -198,4 +235,5 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
     public View findViewById(int resId) {
         return null;
     }
+
 }

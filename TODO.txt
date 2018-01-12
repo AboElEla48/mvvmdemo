@@ -5,8 +5,14 @@
 * [Done] Init fragment with corresponding view ID declared in annotation
 * [Done] Pass lifecycle of fragment to view model
 * [Done] Scan all fields of fragment to initialize ViewModel fields
-* Associate views in activity and fragment to corresponding values in ViewModel
+* [Done] Pass lifecycle of activity/Fragment to view Presenter
+* [Done] Create Data Models fields in ViewModel
+* [Done] Create Data Models fields in ViewPresenter
+* [Done] Associate views in activity to corresponding values in ViewModel
+* [Done] Assure fields in view model are initialized with values from view (default visibility, text val)
+* Associate views in fragment to corresponding values in ViewModel
 * Set Arguments to fragments
 * Handle request permissions in base activity
 * Integrate MessageServer
 * Create annotation for singleton
+
