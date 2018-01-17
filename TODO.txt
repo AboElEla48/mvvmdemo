@@ -10,7 +10,7 @@
 * [Done] Create Data Models fields in ViewPresenter
 * [Done] Associate views in activity to corresponding values in ViewModel
 * [Done] Assure fields in view model are initialized with values from view (default visibility, text val)
-* Associate views in fragment to corresponding values in ViewModel
+* [Done] Associate views in fragment to corresponding values in ViewModel
 * Set Arguments to fragments
 * Handle request permissions in base activity
 * Integrate MessageServer

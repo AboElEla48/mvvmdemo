@@ -1,5 +1,6 @@
 package foureg.mvvmframework.fragment;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.foureg.baseframework.annotations.ContentViewId;
@@ -25,6 +26,12 @@ public class MainFragment extends BaseFragment<MainFragmentViewModel>
 
     @ViewId(R.id.fragment_text_view)
     TextView fragmentTextView;
+
+    @ViewId(R.id.fragment_change_text_value_btn)
+    Button changeTextBtn;
+
+    @ViewId(R.id.fragment_change_text_color_btn)
+    Button changeTextColorBtn;
 
 //    public MainFragment() {
 //        // Required empty public constructor
