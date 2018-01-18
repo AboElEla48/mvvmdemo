@@ -1,7 +1,13 @@
 package com.foureg.baseframework.creators;
 
+import com.foureg.baseframework.annotations.Singleton;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+
+import io.reactivex.Emitter;
+import io.reactivex.Observable;
 
 /**
  * Created by aboelela on 07/01/18.
@@ -17,13 +23,55 @@ public class FieldTypeCreator
      * @return : the created object
      */
     public static Object createFieldObject(Field field) {
-        try {
-            Constructor<?> fieldObjectConstructor = field.getType().getDeclaredConstructor();
-            fieldObjectConstructor.setAccessible(true);
-            return fieldObjectConstructor.newInstance();
-        }catch (Exception ex) {
-            return null;
+        Observable.fromIterable(Arrays.asList(field.getDeclaredAnnotations()))
+                .filter(annotation -> (annotation.annotationType().getName().equals(Singleton.class.getName())))
+                .blockingSubscribe(annotation -> {
+                    createSingletonObject(field.getType());
+                });
+
+        if (createdObject == null) {
+            createdObject = doCreateObject(field.getType());
         }
 
+        return createdObject;
     }
+
+    /**
+     * create object as singleton
+     * @param cls : the type of the class to create
+     */
+    private static void createSingletonObject(Class<?> cls) {
+        SingletonCreator.getInstance().createObject(cls, new Emitter<Object>()
+        {
+            @Override
+            public void onNext(Object value) {
+                createdObject = value;
+            }
+
+            @Override
+            public void onError(Throwable error) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
+    }
+
+    /**
+     * Do create object according to given type
+     * @param clsType : the type to create class
+     * @return : return the created object
+     */
+    static Object doCreateObject(Class<?> clsType) {
+        try {
+            Constructor<?> fieldObjectConstructor = clsType.getDeclaredConstructor();
+            fieldObjectConstructor.setAccessible(true);
+            return fieldObjectConstructor.newInstance();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    private static Object createdObject = null;
 }
