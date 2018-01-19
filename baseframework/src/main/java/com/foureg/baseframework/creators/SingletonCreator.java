@@ -1,5 +1,7 @@
 package com.foureg.baseframework.creators;
 
+import com.foureg.baseframework.types.Property;
+
 import java.util.ArrayList;
 
 import io.reactivex.Emitter;
@@ -36,7 +38,8 @@ public class SingletonCreator
      * @param emitter : the emitter to notify when creating object
      */
     public void createObject(final Class<?> cls, final Emitter<Object> emitter) {
-        createdObj = null;
+        final Property<Object> singletonProperty = new Property<>();
+
         Observable.fromIterable(singleObjects)
                 .filter(new Predicate<Object>()
                 {
@@ -49,17 +52,17 @@ public class SingletonCreator
                 {
                     @Override
                     public void accept(Object foundObj) throws Exception {
-                        createdObj = foundObj;
-                        emitter.onNext(createdObj);
+                        singletonProperty.set(foundObj);
+                        emitter.onNext(singletonProperty.get());
                         emitter.onComplete();
                     }
                 });
 
-        if (createdObj == null) {
-            createdObj = FieldTypeCreator.doCreateObject(cls);
-            singleObjects.add(createdObj);
+        if (singletonProperty.get() == null) {
+            singletonProperty.set(FieldTypeCreator.doCreateObject(cls));
+            singleObjects.add(singletonProperty.get());
 
-            emitter.onNext(createdObj);
+            emitter.onNext(singletonProperty.get());
             emitter.onComplete();
         }
     }
@@ -77,5 +80,4 @@ public class SingletonCreator
 
     private static SingletonCreator creator;
     private ArrayList<Object> singleObjects = new ArrayList<>();
-    private Object createdObj = null;
 }

@@ -1,6 +1,7 @@
 package com.foureg.baseframework.creators;
 
 import com.foureg.baseframework.annotations.Singleton;
+import com.foureg.baseframework.types.Property;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -27,8 +28,7 @@ public class FieldTypeCreator
      * @return : the created object
      */
     public static Object createFieldObject(final Field field) {
-        createdObject = null;
-
+        final Property<Object> createdObject = new Property<>();
         Observable.fromIterable(Arrays.asList(field.getType().getDeclaredAnnotations()))
                 .filter(new Predicate<Annotation>()
                 {
@@ -41,15 +41,15 @@ public class FieldTypeCreator
                 {
                     @Override
                     public void accept(Annotation annotation) throws Exception {
-                        createSingletonObject(field.getType());
+                        createSingletonObject(field.getType(), createdObject);
                     }
                 });
 
-        if (createdObject == null) {
-            createdObject = doCreateObject(field.getType());
+        if (createdObject.get() == null) {
+            createdObject.set(doCreateObject(field.getType()));
         }
 
-        return createdObject;
+        return createdObject.get();
     }
 
     /**
@@ -57,12 +57,12 @@ public class FieldTypeCreator
      *
      * @param cls : the type of the class to create
      */
-    private static void createSingletonObject(Class<?> cls) {
+    private static void createSingletonObject(Class<?> cls, final Property<Object> createdObject) {
         SingletonCreator.getInstance().createObject(cls, new Emitter<Object>()
         {
             @Override
             public void onNext(Object value) {
-                createdObject = value;
+                createdObject.set(value);
             }
 
             @Override
@@ -91,5 +91,4 @@ public class FieldTypeCreator
         }
     }
 
-    private static Object createdObject = null;
 }
