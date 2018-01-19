@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.foureg.baseframework.creators.LifeCycleCreator;
+import com.foureg.baseframework.messages.MessagesActor;
+import com.foureg.baseframework.messages.MessagesServer;
+import com.foureg.baseframework.messages.data.CustomMessage;
 import com.foureg.baseframework.scanners.ContentViewIDScanner;
 import com.foureg.baseframework.ui.interfaces.FragmentLifeCycle;
 import com.foureg.baseframework.viewmodel.BaseViewModel;
@@ -18,7 +21,8 @@ import com.foureg.baseframework.viewmodel.BaseViewModel;
  * This should be the base class for all fragments
  */
 
-public class BaseFragment<VM extends BaseViewModel> extends Fragment implements FragmentLifeCycle
+public class BaseFragment<VM extends BaseViewModel> extends Fragment
+        implements FragmentLifeCycle, MessagesActor
 {
     /**
      * get the view model associated with view
@@ -32,8 +36,10 @@ public class BaseFragment<VM extends BaseViewModel> extends Fragment implements 
     @Override
     public final void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MessagesServer.getInstance().registerActor(this);
         lifeCycleCreator = new LifeCycleCreator(this);
         lifeCycleCreator.onCreate(savedInstanceState);
+
     }
 
     @Nullable
@@ -95,6 +101,7 @@ public class BaseFragment<VM extends BaseViewModel> extends Fragment implements 
     @Override
     public final void onDestroy() {
         lifeCycleCreator.onDestroy();
+        MessagesServer.getInstance().unregisterActor(this);
         super.onDestroy();
     }
 
@@ -103,7 +110,14 @@ public class BaseFragment<VM extends BaseViewModel> extends Fragment implements 
         return fragmentView.findViewById(resId);
     }
 
+    @Override
+    public final void onReceiveMessage(int payload, CustomMessage customMessage) {
+        lifeCycleCreator.onReceiveMessage(payload, customMessage);
+    }
+
     // Object to lifecycle creator
     private LifeCycleCreator lifeCycleCreator;
     private View fragmentView;
+
+
 }

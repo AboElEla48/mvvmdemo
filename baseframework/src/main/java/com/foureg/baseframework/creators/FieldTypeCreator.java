@@ -1,13 +1,17 @@
 package com.foureg.baseframework.creators;
 
 import com.foureg.baseframework.annotations.Singleton;
+import com.foureg.baseframework.types.Property;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import io.reactivex.Emitter;
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 
 /**
  * Created by aboelela on 07/01/18.
@@ -19,35 +23,46 @@ public class FieldTypeCreator
 {
     /**
      * Try to create field object according to declaration
+     *
      * @param field : the field where it is required to create its object
      * @return : the created object
      */
-    public static Object createFieldObject(Field field) {
-        createdObject = null;
-
+    public static Object createFieldObject(final Field field) {
+        final Property<Object> createdObject = new Property<>();
         Observable.fromIterable(Arrays.asList(field.getType().getDeclaredAnnotations()))
-                .filter(annotation -> (annotation.annotationType().getName().equals(Singleton.class.getName())))
-                .blockingSubscribe(annotation -> {
-                    createSingletonObject(field.getType());
+                .filter(new Predicate<Annotation>()
+                {
+                    @Override
+                    public boolean test(Annotation annotation) throws Exception {
+                        return annotation.annotationType().getName().equals(Singleton.class.getName());
+                    }
+                })
+                .blockingSubscribe(new Consumer<Annotation>()
+                {
+                    @Override
+                    public void accept(Annotation annotation) throws Exception {
+                        createSingletonObject(field.getType(), createdObject);
+                    }
                 });
 
-        if (createdObject == null) {
-            createdObject = doCreateObject(field.getType());
+        if (createdObject.get() == null) {
+            createdObject.set(doCreateObject(field.getType()));
         }
 
-        return createdObject;
+        return createdObject.get();
     }
 
     /**
      * create object as singleton
+     *
      * @param cls : the type of the class to create
      */
-    private static void createSingletonObject(Class<?> cls) {
+    private static void createSingletonObject(Class<?> cls, final Property<Object> createdObject) {
         SingletonCreator.getInstance().createObject(cls, new Emitter<Object>()
         {
             @Override
             public void onNext(Object value) {
-                createdObject = value;
+                createdObject.set(value);
             }
 
             @Override
@@ -62,6 +77,7 @@ public class FieldTypeCreator
 
     /**
      * Do create object according to given type
+     *
      * @param clsType : the type to create class
      * @return : return the created object
      */
@@ -75,5 +91,4 @@ public class FieldTypeCreator
         }
     }
 
-    private static Object createdObject = null;
 }

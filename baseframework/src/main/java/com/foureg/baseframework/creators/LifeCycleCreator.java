@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import com.foureg.baseframework.annotations.ViewModel;
 import com.foureg.baseframework.annotations.ViewPresenter;
 import com.foureg.baseframework.exceptions.ErrorInitializingFramework;
+import com.foureg.baseframework.messages.MessagesActor;
+import com.foureg.baseframework.messages.data.CustomMessage;
 import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
 import com.foureg.baseframework.ui.BaseActivity;
 import com.foureg.baseframework.ui.BaseViewPresenter;
@@ -30,7 +32,8 @@ import io.reactivex.functions.Consumer;
  * corresponding ViewModel
  */
 
-public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
+public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle,
+        MessagesActor
 {
     // Hold object of baseViewModel
     private BaseViewModel baseViewModel;
@@ -242,4 +245,10 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
         return null;
     }
 
+    @Override
+    public void onReceiveMessage(int payload, CustomMessage customMessage) {
+        if (baseViewPresenter != null) {
+            baseViewPresenter.onReceiveMessage(payload, customMessage);
+        }
+    }
 }

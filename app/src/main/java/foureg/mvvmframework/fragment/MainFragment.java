@@ -33,6 +33,9 @@ public class MainFragment extends BaseFragment<MainFragmentViewModel>
     @ViewId(R.id.fragment_change_text_color_btn)
     Button changeTextColorBtn;
 
+    @ViewId(R.id.fragment_message_receiver_text_view)
+    TextView messageTextView;
+
 //    public MainFragment() {
 //        // Required empty public constructor
 //    }

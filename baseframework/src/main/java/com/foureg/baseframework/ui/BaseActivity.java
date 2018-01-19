@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.foureg.baseframework.creators.LifeCycleCreator;
+import com.foureg.baseframework.messages.MessagesActor;
+import com.foureg.baseframework.messages.MessagesServer;
+import com.foureg.baseframework.messages.data.CustomMessage;
 import com.foureg.baseframework.scanners.ContentViewIDScanner;
 import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
 import com.foureg.baseframework.viewmodel.BaseViewModel;
@@ -18,11 +21,14 @@ import io.reactivex.functions.Consumer;
  * This should be the base class for all activities
  */
 
-public class BaseActivity<VM extends BaseViewModel> extends AppCompatActivity implements ActivityLifeCycle
+public class BaseActivity<VM extends BaseViewModel> extends AppCompatActivity
+        implements ActivityLifeCycle, MessagesActor
 {
     @Override
     public final void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MessagesServer.getInstance().registerActor(this);
 
         // set content view of activity
         ContentViewIDScanner.extractViewContentID(this, new Consumer<Integer>()
@@ -96,6 +102,7 @@ public class BaseActivity<VM extends BaseViewModel> extends AppCompatActivity im
     @Override
     public final void onDestroy() {
         lifeCycleCreator.onDestroy();
+        MessagesServer.getInstance().unregisterActor(this);
         super.onDestroy();
     }
 
@@ -111,10 +118,17 @@ public class BaseActivity<VM extends BaseViewModel> extends AppCompatActivity im
     }
 
     @Override
+    public final void onReceiveMessage(int payload, CustomMessage customMessage) {
+        lifeCycleCreator.onReceiveMessage(payload, customMessage);
+    }
+
+    @Override
     public View findViewById(int id) {
         return super.findViewById(id);
     }
 
     // Object to lifecycle creator
     private LifeCycleCreator lifeCycleCreator;
+
+
 }
