@@ -17,11 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    compileOptions {
-        android.compileOptions.sourceCompatibility JavaVersion.VERSION_1_8
-        android.compileOptions.targetCompatibility JavaVersion.VERSION_1_8
-    }
+//
+//    compileOptions {
+//        android.compileOptions.sourceCompatibility JavaVersion.VERSION_1_8
+//        android.compileOptions.targetCompatibility JavaVersion.VERSION_1_8
+//    }
 }
 
 dependencies {

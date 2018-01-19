@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import io.reactivex.Emitter;
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 
 /**
  * Created by AboelelaA on 1/18/2018.
@@ -12,14 +14,16 @@ import io.reactivex.Observable;
 
 public class SingletonCreator
 {
-    private SingletonCreator() {}
+    private SingletonCreator() {
+    }
 
     /**
      * get singleton object to creator
+     *
      * @return : singleton object
      */
     public static SingletonCreator getInstance() {
-        if(creator == null) {
+        if (creator == null) {
             creator = new SingletonCreator();
         }
         return creator;
@@ -27,20 +31,31 @@ public class SingletonCreator
 
     /**
      * Create object as singleton
-     * @param cls : the object class type
+     *
+     * @param cls     : the object class type
      * @param emitter : the emitter to notify when creating object
      */
-    public void createObject(Class<?> cls, Emitter<Object> emitter) {
+    public void createObject(final Class<?> cls, final Emitter<Object> emitter) {
         createdObj = null;
         Observable.fromIterable(singleObjects)
-                .filter(oneObj -> isSameClassName(cls, oneObj))
-                .blockingSubscribe(foundObj -> {
-                    createdObj = foundObj;
-                    emitter.onNext(createdObj);
-                    emitter.onComplete();
+                .filter(new Predicate<Object>()
+                {
+                    @Override
+                    public boolean test(Object oneObj) throws Exception {
+                        return isSameClassName(cls, oneObj);
+                    }
+                })
+                .blockingSubscribe(new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object foundObj) throws Exception {
+                        createdObj = foundObj;
+                        emitter.onNext(createdObj);
+                        emitter.onComplete();
+                    }
                 });
 
-        if(createdObj == null) {
+        if (createdObj == null) {
             createdObj = FieldTypeCreator.doCreateObject(cls);
             singleObjects.add(createdObj);
 
@@ -51,7 +66,8 @@ public class SingletonCreator
 
     /**
      * Check if given class is the same as object class
-     * @param cls : the class to compare
+     *
+     * @param cls    : the class to compare
      * @param oneObj : the object to compare its type with given class
      * @return : boolean for comparison result
      */

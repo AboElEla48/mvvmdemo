@@ -4,10 +4,13 @@ import com.foureg.baseframework.exceptions.ErrorNonActorMessagesReceiverExceptio
 import com.foureg.baseframework.messages.data.CustomMessage;
 import com.foureg.baseframework.types.Property;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 
 /**
  * Created by aboelela on 19/01/18.
@@ -57,23 +60,58 @@ public class MessagesServer
      * @param receiver : the receiver actor class to message
      * @param message  : the message object to send
      */
-    public void sendMessage(Class<?> receiver, CustomMessage message)
-            throws ErrorNonActorMessagesReceiverException{
+    public void sendMessage(final Class<?> receiver, CustomMessage message)
+            throws ErrorNonActorMessagesReceiverException {
 
-        Property<Boolean> isReceiverActorInstance = new Property<>();
+        final Property<Boolean> isReceiverActorInstance = new Property<>();
         isReceiverActorInstance.set(false);
-        Observable.fromIterable(Arrays.asList(receiver.getInterfaces()))
-                .filter(type -> type.getName().equals(MessagesActor.class.getName()))
-                .blockingSubscribe(c -> isReceiverActorInstance.set(true));
 
-        if(!isReceiverActorInstance.get()) {
+        Observable.fromIterable(Arrays.asList(receiver.getMethods()))
+                .filter(new Predicate<Method>()
+                {
+                    @Override
+                    public boolean test(Method method) throws Exception {
+                        return method.getName().equals(MessagesActor.class.getMethods()[0].getName());
+                    }
+                })
+                .blockingSubscribe(new Consumer<Method>()
+                {
+                    @Override
+                    public void accept(Method method) throws Exception {
+                        isReceiverActorInstance.set(true);
+                    }
+                });
+
+        Observable.fromIterable(Arrays.asList(receiver.getInterfaces()))
+                .filter(new Predicate<Class<?>>()
+                {
+                    @Override
+                    public boolean test(Class<?> type) throws Exception {
+                        return type.getName().equals(MessagesActor.class.getName());
+                    }
+                })
+                .blockingSubscribe(new Consumer<Class<?>>()
+                {
+                    @Override
+                    public void accept(Class<?> aClass) throws Exception {
+                        isReceiverActorInstance.set(true);
+                    }
+                });
+
+        if (!isReceiverActorInstance.get()) {
             throw new ErrorNonActorMessagesReceiverException("MessagesServer::sendMessage, " +
                     "you are trying to send message to Non-Actor receiver. " +
                     "Please implement MessagesActor to " + receiver.getName());
         }
 
         Observable.fromIterable(messagesActors)
-                .filter(actor -> actor.getClass().getName().equals(receiver.getName()))
+                .filter(new Predicate<MessagesActor>()
+                {
+                    @Override
+                    public boolean test(MessagesActor actor) throws Exception {
+                        return actor.getClass().getName().equals(receiver.getName());
+                    }
+                })
                 .blockingFirst()
                 .onReceiveMessage(message.getPayLoad(), message);
     }

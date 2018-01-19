@@ -73,42 +73,50 @@ public class FieldTypeCreatorTest
         Assert.assertTrue(fieldsHolderDummy.nonSingletonType2Dummy.value == 11);
     }
 
-    private void createSingletonFields(TestFieldsHolderDummy fieldsHolderDummy) {
+    private void createSingletonFields(final TestFieldsHolderDummy fieldsHolderDummy) {
         FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(fieldsHolderDummy, TestDummyAnnotation.class,
-                field -> {
-                    Object o1 = FieldTypeCreator.createFieldObject(field);
+                new Consumer<Field>()
+                {
+                    @Override
+                    public void accept(Field field) throws Exception {
+                        Object o1 = FieldTypeCreator.createFieldObject(field);
 
-                    Assert.assertTrue(o1 != null);
-                    Assert.assertTrue(o1 instanceof TestFieldSingletonTypeDummy);
+                        Assert.assertTrue(o1 != null);
+                        Assert.assertTrue(o1 instanceof TestFieldSingletonTypeDummy);
 
-                    boolean isAccessible = field.isAccessible();
-                    field.setAccessible(true);
-                    field.set(fieldsHolderDummy, o1);
+                        boolean isAccessible = field.isAccessible();
+                        field.setAccessible(true);
+                        field.set(fieldsHolderDummy, o1);
 
-                    // Increment incrementVal
-                    ((TestFieldSingletonTypeDummy) o1).incrementVal++;
+                        // Increment incrementVal
+                        ((TestFieldSingletonTypeDummy) o1).incrementVal++;
 
-                    field.setAccessible(isAccessible);
+                        field.setAccessible(isAccessible);
+                    }
                 });
     }
 
-    private void createNonSingletonFields(TestFieldsHolderDummy fieldsHolderDummy) {
+    private void createNonSingletonFields(final TestFieldsHolderDummy fieldsHolderDummy) {
         FieldAnnotationTypeScanner.extractFieldsAnnotatedBy(fieldsHolderDummy,
                 TestDummyNonSingletonAnnotation.class,
-                field -> {
-                    Object o1 = FieldTypeCreator.createFieldObject(field);
+                new Consumer<Field>()
+                {
+                    @Override
+                    public void accept(Field field) throws Exception {
+                        Object o1 = FieldTypeCreator.createFieldObject(field);
 
-                    Assert.assertTrue(o1 != null);
-                    Assert.assertTrue(o1 instanceof TestFieldNonSingletonTypeDummy);
+                        Assert.assertTrue(o1 != null);
+                        Assert.assertTrue(o1 instanceof TestFieldNonSingletonTypeDummy);
 
-                    boolean isAccessible = field.isAccessible();
-                    field.setAccessible(true);
-                    field.set(fieldsHolderDummy, o1);
+                        boolean isAccessible = field.isAccessible();
+                        field.setAccessible(true);
+                        field.set(fieldsHolderDummy, o1);
 
-                    // Increment incrementVal
-                    ((TestFieldNonSingletonTypeDummy) o1).value++;
+                        // Increment incrementVal
+                        ((TestFieldNonSingletonTypeDummy) o1).value++;
 
-                    field.setAccessible(isAccessible);
+                        field.setAccessible(isAccessible);
+                    }
                 });
     }
 
@@ -122,8 +130,20 @@ public class FieldTypeCreatorTest
 
         acc = 0;
         Observable.fromIterable(complexArrays)
-                .subscribe(arrInt -> Observable.fromIterable(arrInt)
-                        .blockingSubscribe(val -> accumulateVal(val)));
+                .subscribe(new Consumer<List<Integer>>()
+                {
+                    @Override
+                    public void accept(List<Integer> arrInt) throws Exception {
+                        Observable.fromIterable(arrInt)
+                                .blockingSubscribe(new Consumer<Integer>()
+                                {
+                                    @Override
+                                    public void accept(Integer val) throws Exception {
+                                        accumulateVal(val);
+                                    }
+                                });
+                    }
+                });
 
         Assert.assertTrue(acc == (1 + 2 + 3 + 4 + 5 + 6));
     }
