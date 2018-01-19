@@ -7,6 +7,7 @@ import com.foureg.baseframework.types.Property;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
@@ -21,6 +22,7 @@ public class MessagesServer
 {
     protected MessagesServer() {
         messagesActors = new ArrayList<>();
+        pendingMessages = new HashMap<>();
     }
 
     /**
@@ -43,6 +45,13 @@ public class MessagesServer
      */
     public void registerActor(MessagesActor actor) {
         messagesActors.add(actor);
+
+        // When registering new actor, check if there are pending messages for it
+        CustomMessage pendingMessage = pendingMessages.get(actor.getClass());
+        if(pendingMessage != null) {
+            actor.onReceiveMessage(pendingMessage.getPayLoad(), pendingMessage);
+            pendingMessages.remove(actor.getClass());
+        }
     }
 
     /**
@@ -60,12 +69,13 @@ public class MessagesServer
      * @param receiver : the receiver actor class to message
      * @param message  : the message object to send
      */
-    public void sendMessage(final Class<?> receiver, CustomMessage message)
+    public void sendMessage(final Class<?> receiver, final CustomMessage message)
             throws ErrorNonActorMessagesReceiverException {
 
         final Property<Boolean> isReceiverActorInstance = new Property<>();
         isReceiverActorInstance.set(false);
 
+        // Assure the receiver is message actor
         Observable.fromIterable(Arrays.asList(receiver.getMethods()))
                 .filter(new Predicate<Method>()
                 {
@@ -82,28 +92,16 @@ public class MessagesServer
                     }
                 });
 
-        Observable.fromIterable(Arrays.asList(receiver.getInterfaces()))
-                .filter(new Predicate<Class<?>>()
-                {
-                    @Override
-                    public boolean test(Class<?> type) throws Exception {
-                        return type.getName().equals(MessagesActor.class.getName());
-                    }
-                })
-                .blockingSubscribe(new Consumer<Class<?>>()
-                {
-                    @Override
-                    public void accept(Class<?> aClass) throws Exception {
-                        isReceiverActorInstance.set(true);
-                    }
-                });
-
         if (!isReceiverActorInstance.get()) {
             throw new ErrorNonActorMessagesReceiverException("MessagesServer::sendMessage, " +
                     "you are trying to send message to Non-Actor receiver. " +
                     "Please implement MessagesActor to " + receiver.getName());
         }
 
+        final Property<Boolean> isMsgSent = new Property<>();
+        isMsgSent.set(false);
+
+        // search for object to receiver and send message to it
         Observable.fromIterable(messagesActors)
                 .filter(new Predicate<MessagesActor>()
                 {
@@ -112,12 +110,27 @@ public class MessagesServer
                         return actor.getClass().getName().equals(receiver.getName());
                     }
                 })
-                .blockingFirst()
-                .onReceiveMessage(message.getPayLoad(), message);
+                .blockingSubscribe(new Consumer<MessagesActor>()
+                {
+                    @Override
+                    public void accept(MessagesActor actor) throws Exception {
+                        actor.onReceiveMessage(message.getPayLoad(), message);
+                        isMsgSent.set(true);
+                    }
+                });
+
+
+        // check if message sent or it will be pending message
+        if (!isMsgSent.get()) {
+            pendingMessages.put(receiver, message);
+        }
     }
 
     private static MessagesServer messagesServer;
 
     // Hold all actors in system
     protected ArrayList<MessagesActor> messagesActors;
+
+    // Hold map of pending messages
+    private HashMap<Class<?>, CustomMessage> pendingMessages;
 }

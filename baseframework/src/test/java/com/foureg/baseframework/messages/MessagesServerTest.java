@@ -44,6 +44,21 @@ public class MessagesServerTest
     }
 
     @Test
+    public void test_sendPendingMessageToActor() throws Exception {
+        TestMessagesServer messagesServer = new TestMessagesServer();
+
+        // send message before registration
+        messagesServer.sendMessage(TestReceiverActor.class, new CustomMessage(1, 10,
+                MSG_TXT));
+
+        // register actor
+        messagesServer.registerActor(receiverActor);
+
+        Assert.assertTrue(receiverActor.payload == 10);
+        Assert.assertTrue(receiverActor.customMessage.getData().equals(MSG_TXT));
+    }
+
+    @Test
     public void test_sendMessageToNonActor() throws Exception {
         TestMessagesServer messagesServer = new TestMessagesServer();
 

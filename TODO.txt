@@ -14,7 +14,7 @@
 * [Done] Create annotation for singleton
 * [Done] Integrate MessageServer
 * [Done] Change createdObj field in singleton to be Property
-* In Messages server, support send immediately and send later
+* [Done] In Messages server, support send immediately and send later
 * Set Arguments to fragments
 * Handle request permissions in base activity
 
