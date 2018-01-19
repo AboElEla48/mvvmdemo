@@ -11,7 +11,7 @@
 * [Done] Associate views in activity to corresponding values in ViewModel
 * [Done] Assure fields in view model are initialized with values from view (default visibility, text val)
 * [Done] Associate views in fragment to corresponding values in ViewModel
-* Create annotation for singleton
+* [Done] Create annotation for singleton
 * Integrate MessageServer
 * Set Arguments to fragments
 * Handle request permissions in base activity
