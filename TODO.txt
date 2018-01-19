@@ -12,7 +12,9 @@
 * [Done] Assure fields in view model are initialized with values from view (default visibility, text val)
 * [Done] Associate views in fragment to corresponding values in ViewModel
 * [Done] Create annotation for singleton
-* Integrate MessageServer
+* [Done] Integrate MessageServer
+* In Messages server, support send immediately and send later
+* Change createdObj field in singleton to be Property
 * Set Arguments to fragments
 * Handle request permissions in base activity
 
