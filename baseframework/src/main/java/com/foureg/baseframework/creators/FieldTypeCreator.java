@@ -23,7 +23,9 @@ public class FieldTypeCreator
      * @return : the created object
      */
     public static Object createFieldObject(Field field) {
-        Observable.fromIterable(Arrays.asList(field.getDeclaredAnnotations()))
+        createdObject = null;
+
+        Observable.fromIterable(Arrays.asList(field.getType().getDeclaredAnnotations()))
                 .filter(annotation -> (annotation.annotationType().getName().equals(Singleton.class.getName())))
                 .blockingSubscribe(annotation -> {
                     createSingletonObject(field.getType());

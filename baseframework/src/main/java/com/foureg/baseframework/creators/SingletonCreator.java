@@ -40,9 +40,13 @@ public class SingletonCreator
                     emitter.onComplete();
                 });
 
-        createdObj = FieldTypeCreator.doCreateObject(cls);
-        emitter.onNext(createdObj);
-        emitter.onComplete();
+        if(createdObj == null) {
+            createdObj = FieldTypeCreator.doCreateObject(cls);
+            singleObjects.add(createdObj);
+
+            emitter.onNext(createdObj);
+            emitter.onComplete();
+        }
     }
 
     /**
