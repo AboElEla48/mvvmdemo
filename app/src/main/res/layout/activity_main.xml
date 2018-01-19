@@ -118,6 +118,22 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_sendMessage"
+        android:layout_below="@id/layout_view_hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/activity_send_msg_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Send Message to fragment"/>
+
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/activity_fragment_placeholder"
         android:layout_width="match_parent"

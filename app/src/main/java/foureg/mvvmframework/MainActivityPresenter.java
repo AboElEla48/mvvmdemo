@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 
+import com.foureg.baseframework.messages.MessagesServer;
+import com.foureg.baseframework.messages.data.CustomMessage;
 import com.foureg.baseframework.ui.BaseViewPresenter;
 import com.jakewharton.rxbinding2.view.RxView;
 
@@ -46,6 +48,21 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
 
         // Editor hint color value
         changeHintTextColor();
+
+        // send message
+        sendMessage();
+    }
+
+    private void sendMessage() {
+        RxView.clicks(getView().sendMessageBtn)
+                .subscribe(new Consumer<Object>()
+                {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        MessagesServer.getInstance().sendMessage(MainFragment.class,
+                                new CustomMessage(11, 10, "Message from Activity"));
+                    }
+                });
     }
 
     private void changeHintTextColor() {

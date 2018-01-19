@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.foureg.baseframework.annotations.DataModel;
 import com.foureg.baseframework.creators.FieldTypeCreator;
+import com.foureg.baseframework.messages.MessagesActor;
+import com.foureg.baseframework.messages.data.CustomMessage;
 import com.foureg.baseframework.model.BaseDataModel;
 import com.foureg.baseframework.scanners.FieldAnnotationTypeScanner;
 import com.foureg.baseframework.ui.interfaces.ActivityLifeCycle;
@@ -24,7 +26,8 @@ import io.reactivex.functions.Consumer;
  * The parent class for all presenters
  */
 
-public class BaseViewPresenter<V extends BaseView> implements FragmentLifeCycle, ActivityLifeCycle
+public class BaseViewPresenter<V extends BaseView>
+        implements FragmentLifeCycle, ActivityLifeCycle, MessagesActor
 {
     /**
      * In case the view is fragment, then this method will be called instead of Create View
@@ -140,6 +143,11 @@ public class BaseViewPresenter<V extends BaseView> implements FragmentLifeCycle,
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onReceiveMessage(int payload, CustomMessage customMessage) {
 
     }
 

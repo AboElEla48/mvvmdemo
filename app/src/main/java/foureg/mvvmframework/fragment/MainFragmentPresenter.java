@@ -2,6 +2,7 @@ package foureg.mvvmframework.fragment;
 
 import android.util.Log;
 
+import com.foureg.baseframework.messages.data.CustomMessage;
 import com.foureg.baseframework.ui.BaseViewPresenter;
 import com.jakewharton.rxbinding2.view.RxView;
 
@@ -40,5 +41,12 @@ public class MainFragmentPresenter extends BaseViewPresenter<MainFragment>
                         Log.w(Constants.LOG_TAG, "***********************");
                     }
                 });
+    }
+
+    @Override
+    public void onReceiveMessage(int payload, CustomMessage customMessage) {
+        super.onReceiveMessage(payload, customMessage);
+
+        getView().messageTextView.setText(customMessage.getData().toString());
     }
 }

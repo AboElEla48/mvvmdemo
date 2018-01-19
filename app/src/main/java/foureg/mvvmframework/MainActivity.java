@@ -50,4 +50,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel>
 
     @ViewId(R.id.activity_change_editor_hint_text_color_btn)
     Button changeEditorHintColorBtn;
+
+    @ViewId(R.id.activity_send_msg_btn)
+    Button sendMessageBtn;
 }
