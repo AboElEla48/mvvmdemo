@@ -19,6 +19,18 @@ class TestFieldsHolderDummy implements BaseView
     @ViewId(15)
     View fieldVal;
 
+    @TestDummyAnnotation
+    TestFieldSingletonTypeDummy singletonTypeDummy;
+
+    @TestDummyAnnotation
+    TestFieldSingletonTypeDummy singletonType2Dummy;
+
+    @TestDummyNonSingletonAnnotation
+    TestFieldNonSingletonTypeDummy nonSingletonTypeDummy;
+
+    @TestDummyNonSingletonAnnotation
+    TestFieldNonSingletonTypeDummy nonSingletonType2Dummy;
+
     @Override
     public View findViewById(int resId) {
         return null;

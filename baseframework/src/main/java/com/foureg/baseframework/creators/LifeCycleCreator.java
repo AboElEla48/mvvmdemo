@@ -74,8 +74,6 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle
             createFieldAnnotatedAsViewModel(baseView);
         }
 
-
-
         if (baseViewPresenter != null) {
             // make lifecycle calls
             baseViewPresenter.onCreate(savedInstanceState);
