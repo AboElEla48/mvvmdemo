@@ -15,7 +15,7 @@
 * [Done] Integrate MessageServer
 * [Done] Change createdObj field in singleton to be Property
 * [Done] In Messages server, support send immediately and send later
-* Set value of ViewModel in activity to be real object instead of Null
+* [Done] Set value of ViewModel in activity to be real object instead of Null
 * Set Arguments to fragments
 * Handle request permissions in base activity
 
