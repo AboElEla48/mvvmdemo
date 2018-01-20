@@ -131,6 +131,12 @@ public class LifeCycleCreator implements ActivityLifeCycle, FragmentLifeCycle,
                     public void accept(Field viewModelField) throws Exception {
                         // create base view model
                         baseViewModel = (BaseViewModel) FieldTypeCreator.createFieldObject(viewModelField);
+
+                        boolean isAccessible = viewModelField.isAccessible();
+                        viewModelField.setAccessible(true);
+                        viewModelField.set(baseView, baseViewModel);
+                        viewModelField.setAccessible(isAccessible);
+
                         baseViewModel.initViewModel(baseView);
 
                     }

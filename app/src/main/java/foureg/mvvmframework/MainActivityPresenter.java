@@ -31,6 +31,9 @@ public class MainActivityPresenter extends BaseViewPresenter<MainActivity>
         transaction.replace(R.id.activity_fragment_placeholder, new MainFragment());
         transaction.commit();
 
+        // Change text in text view
+        getView().viewModel.getTextVal().set("Initial Text");
+
         // change text view string
         changeTextViewString();
 
